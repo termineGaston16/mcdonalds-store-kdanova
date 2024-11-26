@@ -30,7 +30,7 @@ export async function getCategories(): Promise<Map<Product['category'], Product[
 export async function getProductsByCategory(category: string | undefined, indexResults: number): Promise<Product[]> {
 
     try {
-        if (!category) return [...PRODUCTS.map(product => ({
+        if (!category) return PRODUCTS.map(product => ({
             category: product.category,
             description: product.description,
             id: product.id,
@@ -39,9 +39,9 @@ export async function getProductsByCategory(category: string | undefined, indexR
             price: product.price,
             stock: product.stock,
             options: product.options
-        } as Product)).slice(indexResults, indexResults + 4)]
+        } as Product)).slice(indexResults, indexResults + 4)
 
-        return [...PRODUCTS.filter(product => product.category.toLocaleLowerCase() === category.toLocaleLowerCase()).slice(indexResults, indexResults + 4)]
+        return PRODUCTS.filter(product => product.category.toLocaleLowerCase() === category.toLocaleLowerCase()).slice(indexResults, indexResults + 4);
 
     } catch (error) {
         console.error(error)
