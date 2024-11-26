@@ -4,15 +4,16 @@ import { getProductsByCategory } from "../FIREBASE";
 import { useCallback, useRef, useState } from "react";
 import './Style/products.css';
 import { Product } from "../FIREBASE/interface";
+import { IoMdAddCircleOutline } from "react-icons/io";
 
-interface Props{
+interface Props {
     resultLocal: Product[]
     setResultLocal: React.Dispatch<React.SetStateAction<Product[]>>
 }
 
-const Products: React.FC<Props> =({resultLocal, setResultLocal})=> {
+const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
     const { key } = useParams();
-    const [openProductDetails, setOpenProductDetails] = useState<boolean>(false);
+    const [productOpen, setProductOpen] = useState<Product | null>(null)
 
     const { isError, isLoading, refetch } = useQuery({
         queryKey: ['category', key],
@@ -63,7 +64,7 @@ const Products: React.FC<Props> =({resultLocal, setResultLocal})=> {
                 {resultLocal.map((products, index) => (
                     <li
                         className="products__list__item"
-                        onClick={() => setOpenProductDetails(true)}
+                        onClick={() => setProductOpen(products)}
                         key={index}
                         ref={index === resultLocal.length - 1 ? resultsCallback : null}
                     >
@@ -79,7 +80,42 @@ const Products: React.FC<Props> =({resultLocal, setResultLocal})=> {
                 ))}
             </ul>
 
-            {openProductDetails && <div></div>}
+            {productOpen && <div className="productOpen__content">
+                <div className="productOpen">
+                    <section className="productOpen__face-one">
+                        <span className="productOpen__face-one__name">{productOpen.name}</span>
+                        <img
+                            className="productOpen__face-one__img"
+                            src={productOpen.img} alt={productOpen.name.toLocaleUpperCase()} />
+                    </section>
+                    <section className="productOpen__face-two">
+                        <button
+                            className="productOpen__close"
+                            type="button"
+                            onClick={() => setProductOpen(null)}>Cerrar</button>
+
+                        <p className="productOpen__face-two__description">{productOpen.description}</p>
+
+                        <span className="productOpen__face-two__price">${productOpen.price}</span>
+
+                        {productOpen.stock > 0
+                            ?
+                            <><span className="productOpen__face-two__stock">Stock disponible: {productOpen.stock}</span>
+                                <hr className="productOpen__face-two__hr" />
+                                <fieldset className="productOpen__face-two__interaction-cart">
+                                    <legend className="productOpen__face-two__interaction-cart__title">Añade este producto al carrito</legend>
+                                    <div className="productOpen__face-two__interaction-cart__buttons">
+                                        <button className="productOpen__face-two__interaction-cart__btn" type="button">{"<"}</button>
+                                        <span className="productOpen__face-two__interaction-cart__amount">0</span>
+                                        <button className="productOpen__face-two__interaction-cart__btn" type="button">{">"}</button>
+                                    </div>
+                                    <button className="productOpen__face-two__interaction-cart__btn-add" type="button">Añadir <IoMdAddCircleOutline /></button>
+                                </fieldset> </>
+                            :
+                            <span className="productOpen__face-two__no-stock">Lo sentimos pero no hay más cantidades de momento.</span>}
+                    </section>
+                </div>
+            </div>}
         </main>
     );
 }

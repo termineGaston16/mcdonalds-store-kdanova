@@ -41,6 +41,8 @@
     flex-direction: column;
     gap: 1vw;
 
+    cursor: pointer;
+
 }
 .products__list__item__price{
     width: 100%;
@@ -65,3 +67,81 @@
     text-overflow: ellipsis;
     max-width: 15vw;
 }
+
+.productOpen__content{
+    width: 100vw;
+    height: 100vh;
+
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.746);
+    top: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.productOpen{
+    background-color: rgba(245, 222, 179, 0.641);
+
+    width: 50vw;
+    min-width: 300px;
+    max-width: 1000px;
+    aspect-ratio: 16/9;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 1vw;
+
+    border-radius: 1rem;
+    padding: 1vw;
+}
+
+.productOpen__face-one, .productOpen__face-two{
+    border: 1px solid yellow;
+    width: 50%;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1vw;
+
+    text-align: center;
+}
+
+.productOpen__face-one__name{
+    font-size: clamp(14px, 1.5vw, 100px);
+}
+
+.productOpen__face-one__img{
+    aspect-ratio: 1/1;
+    width: 20vw;
+}
+
+.productOpen__close{
+    width: 100%;
+    background: none;
+    border: none;
+
+    text-align: end;
+    padding-right: 2vw;
+    
+    font-size: clamp(14px, 1vw, 100px);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    cursor: pointer;
+}
+
+
+
+
+
+
