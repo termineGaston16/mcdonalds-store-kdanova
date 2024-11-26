@@ -1,23 +1,26 @@
 export interface Product {
     id: string,
     name: string,
-    img:string
+    img: string
     description: string,
     price: number,
     stock: number,
     category: string,
     options?: {
-        sizes: string[]
+        sizes: {
+            size: string,
+            additionalPrice: number
+        }[]
     }
 }
 
-export interface Cart{
+export interface Cart {
     content: ProductsInCart[],
     priceTotal: number,
     packaging: 'EAT HERE' | 'CARRY' | null
 }
 
-export interface ProductsInCart{
+export interface ProductsInCart {
     id: Product['id'],
     name: Product['name']
     img: Product['img']
@@ -25,4 +28,34 @@ export interface ProductsInCart{
     price: Product['price']
     stockInCart: number
     chosenSize: number
+}
+
+export interface Coupon<T> {
+    id: string,
+    img: string,
+    name: string,
+    description: string,
+    products: string[],
+    type: T
+}
+
+export interface CouponFixed {
+    type: 'fixed',
+    finalPrice: number
+}
+
+export interface CouponPercentage {
+    type: 'percentage',
+    discountPercent: number,
+    categoryAllowed: Product['category']
+}
+
+export interface CouponFixedDiscount {
+    type: "fixed-discount",
+    discountAmount: number,
+    categoryAllowed: Product['category']
+}
+
+export interface CouponBogo {
+    type: "bogo",
 }

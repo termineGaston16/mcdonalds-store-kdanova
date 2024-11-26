@@ -1,10 +1,11 @@
 import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getProductsByCategory } from "../FIREBASE";
 import { useCallback, useRef, useState } from "react";
 import './Style/products.css';
 import { Product } from "../FIREBASE/interface";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { BiSearchAlt } from "react-icons/bi";
 
 interface Props {
     resultLocal: Product[]
@@ -14,10 +15,14 @@ interface Props {
 const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
     const { key } = useParams();
     const [productOpen, setProductOpen] = useState<Product | null>(null)
+    const location = useLocation()
+    const navigate = useNavigate()
 
     const { isError, isLoading, refetch } = useQuery({
         queryKey: ['category', key],
         queryFn: async () => {
+            if(key?.includes('buscar=')) console.log(true);
+            
             if (!key) return await getProductsByCategory(undefined, resultLocal.length);
             return await getProductsByCategory(key, resultLocal.length);
         },
@@ -45,6 +50,12 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
         });
         if (node) resultsObserver.current.observe(node);
     }, [isLoading, refetch]);
+
+    const performSearch =(e: React.FormEvent<HTMLFormElement>)=>{
+        e.preventDefault()
+        const query = new FormData(e.currentTarget).get('searchQuery')
+        navigate(`/buscar=${query}`)
+    }
 
     return (
         <main className="products">
@@ -104,11 +115,24 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                                 <hr className="productOpen__face-two__hr" />
                                 <fieldset className="productOpen__face-two__interaction-cart">
                                     <legend className="productOpen__face-two__interaction-cart__title">Añade este producto al carrito</legend>
+
                                     <div className="productOpen__face-two__interaction-cart__buttons">
                                         <button className="productOpen__face-two__interaction-cart__btn" type="button">{"<"}</button>
                                         <span className="productOpen__face-two__interaction-cart__amount">0</span>
                                         <button className="productOpen__face-two__interaction-cart__btn" type="button">{">"}</button>
                                     </div>
+
+                                    {productOpen.options && <div>
+                                        <ul>
+                                            {productOpen.options.sizes.map((options, index) => (
+                                                <li key={index}>
+                                                    <span>+${options.additionalPrice}</span>
+                                                    <span>{options.size}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>}
+
                                     <button className="productOpen__face-two__interaction-cart__btn-add" type="button">Añadir <IoMdAddCircleOutline /></button>
                                 </fieldset> </>
                             :
@@ -116,6 +140,15 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                     </section>
                 </div>
             </div>}
+
+            {location.pathname === '/buscar' &&
+                <div>
+                    <form onSubmit={performSearch}>
+                        <h5>¡Buscador de Mcdonalds!</h5>
+                        <input type="search" name="searchQuery"/>
+                        <button type="submit"><BiSearchAlt /></button>
+                    </form>
+                </div>}
         </main>
     );
 }

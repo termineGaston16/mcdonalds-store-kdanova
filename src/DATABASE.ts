@@ -1,4 +1,4 @@
-import { Cart, Product } from "./FIREBASE/interface";
+import { Cart, Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage, Product } from "./FIREBASE/interface";
 
 export const PRODUCTS: Product[] = [
     {
@@ -37,7 +37,20 @@ export const PRODUCTS: Product[] = [
         stock: 20,
         category: "Acompañamientos",
         options: {
-            sizes: ["6 piezas", "10 piezas", "20 piezas"]
+            sizes: [
+                {
+                    size: "6 piezas",
+                    additionalPrice: 0
+                },
+                {
+                    size: "10 piezas",
+                    additionalPrice: 1.99
+                },
+                {
+                    size: "20 piezas",
+                    additionalPrice: 4.99
+                }
+            ]
         }
     },
     {
@@ -49,7 +62,20 @@ export const PRODUCTS: Product[] = [
         stock: 20,
         category: "Acompañamientos",
         options: {
-            sizes: ["Pequeño", "Mediano", "Grande"]
+            sizes: [
+                {
+                    size: "Pequeño",
+                    additionalPrice: 0
+                },
+                {
+                    size: "Mediano",
+                    additionalPrice: 2.50
+                },
+                {
+                    size: "Grande",
+                    additionalPrice: 5.70
+                }
+            ]
         }
     },
     {
@@ -88,7 +114,20 @@ export const PRODUCTS: Product[] = [
         stock: 20,
         category: "Bebidas",
         options: {
-            sizes: ["Pequeño", "Mediano", "Grande"]
+            sizes: [
+                {
+                    size: "Pequeño",
+                    additionalPrice: 0
+                },
+                {
+                    size: "Mediano",
+                    additionalPrice: 2.50
+                },
+                {
+                    size: "Grande",
+                    additionalPrice: 5.70
+                }
+            ]
         }
     },
     {
@@ -100,7 +139,20 @@ export const PRODUCTS: Product[] = [
         stock: 20,
         category: "Bebidas",
         options: {
-            sizes: ["Pequeño", "Mediano", "Grande"]
+            sizes: [
+                {
+                    size: "Pequeño",
+                    additionalPrice: 0
+                },
+                {
+                    size: "Mediano",
+                    additionalPrice: 2.50
+                },
+                {
+                    size: "Grande",
+                    additionalPrice: 5.70
+                }
+            ]
         }
     },
     {
@@ -193,7 +245,20 @@ export const PRODUCTS: Product[] = [
         stock: 20,
         category: "Bebidas",
         options: {
-            sizes: ["Pequeño", "Mediano", "Grande"]
+            sizes: [
+                {
+                    size: "Pequeño",
+                    additionalPrice: 0
+                },
+                {
+                    size: "Mediano",
+                    additionalPrice: 2.50
+                },
+                {
+                    size: "Grande",
+                    additionalPrice: 5.70
+                }
+            ]
         }
     }
 ]
@@ -204,65 +269,88 @@ export const CART: Cart = {
     priceTotal: 0
 }
 
-/*export const CUPONS = [
+export const COUPONS: Coupon<CouponFixed | CouponPercentage | CouponFixedDiscount | CouponBogo>[] = [
     {
-        id: a,
-        img: string,
+        id: "a",
+        img: '',
         name: "Combo Big Mac",
         description: "Big Mac + Papas Medianas + Coca-Cola Mediana",
-        products: [1, 5, 10],
-        finalPrice: 7.99,
+        products: ["1", "5", "10"],
+        type: {
+            type: 'fixed',
+            finalPrice: 7.99
+        }
+    } as Coupon<CouponFixed>,
     {
-        id: b,
-        img: string,
-        name: "Descuento 20% en Postres",
-        description: "Obtén un 20% de descuento en cualquier postre.",
-        products: {},
-        finalPrice: (product) => (product.price * 0.8).toFixed(2), // Aplica el 20% de descuento
-
-    },
-    {
-        id: c,
-        img: string,
-        name: "2x1 en McChicken",
-        description: "Compra un McChicken y obtén otro gratis.",
-        products: [2, 2],
-        finalPrice: products[0].price
-    },
-    {
-        id: d,
-        img: string,
+        id: "b",
+        img: '',
         name: "Combo Desayuno",
         description: "Egg McMuffin + Hash Browns + Café Mediano",
-        products: [14, 15, 9],
-        finalPrice: 5.49,
-    },
+        products: ["14", "15", "9"],
+        type: {
+            type: 'fixed',
+            finalPrice: 5.49
+        }
+    } as Coupon<CouponFixed>,
     {
-        id: e,
-        img: string,
-        name: "Descuento $1 en Bebidas Grandes",
-        description: "Ahorra $1 en cualquier bebida de tamaño grande.",
-        products: {},
-        finalPrice: (product) => Math.max(product.price - 1, 0).toFixed(2)
-    },
-    {
-        id: f,
-        img: string,
+        id: "c",
+        img: '',
         name: "Nuggets + Papas",
         description: "10 Nuggets + Papas Grandes por $6.99",
-        products: [4, 5], // IDs de los productos incluidos
-        finalPrice: 6.99, // Precio especial por el combo
-        options: {
-            sizes: ["10 piezas", "Grande"] // Especifica los tamaños incluidos
-        },
-    },
+        products: ["4", "5"],
+        type: {
+            type: 'fixed',
+            finalPrice: 6.99
+        }
+    } as Coupon<CouponFixed>,
     {
-        id: g,
+        id: "d",
+        img: '',
+        name: "Descuento 20% en Postres",
+        description: "Obtén un 20% de descuento en cualquier postre.",
+        products: [],
+        type: {
+            type: 'percentage',
+            categoryAllowed: 'Postres',
+            discountPercent: 20
+        }
+    } as Coupon<CouponPercentage>,
+    {
+        id: "e",
+        img: '',
         name: "50% en McFlurry Oreo",
         description: "Disfruta un McFlurry Oreo con un 50% de descuento.",
-        product: 7, // ID del producto McFlurry Oreo
-        discountPercent: 50,
-    },
-] */
+        products: ["7"],
+        type: {
+            type: 'percentage',
+            categoryAllowed: 'Postres',
+            discountPercent: 50
+        }
+    } as Coupon<CouponPercentage>,
+    {
+        id: "f",
+        img: '',
+        name: "Descuento $1 en Bebidas",
+        description: "Ahorra $1 en cualquier bebida",
+        products: [],
+        type: {
+            type: 'fixed-discount',
+            categoryAllowed: 'Bebidas',
+            discountAmount: 1
+        }
+    } as Coupon<CouponFixedDiscount>,
+    {
+        id: "g",
+        img: '',
+        name: "2x1 en McChicken",
+        description: "Compra un McChicken y obtén otro gratis.",
+        products: ["2"],
+        type: {
+            type: 'bogo'
+        }
+    } as Coupon<CouponBogo>,
+
+];
+
 
 

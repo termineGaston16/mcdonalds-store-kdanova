@@ -4,7 +4,7 @@ import Header from "./HEADER/Header";
 import NavBar from "./HEADER/NavBar";
 import { Provider } from "react-redux";
 import { store } from "./REDUX/Store";
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Product } from "./FIREBASE/interface";
 import Products from "./PRODUCTS/Products";
 
@@ -12,6 +12,8 @@ export default function App() {
 
     const [resultLocal, setResultLocal] = useState<Product[]>([])
     const query = new QueryClient()
+
+    const Coupons = lazy(()=> import('./COUPONS/Coupons'))
 
     return (
         <Provider store={store}>
@@ -24,9 +26,12 @@ export default function App() {
                     <Routes>
                         <Route path="*" element='Error 404' />
 
-                        <Route path="/:key?" element={
-                            <Products resultLocal={resultLocal} setResultLocal={setResultLocal} />
-                        } />
+                        <Route path="/:key?" element={<Products resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
+                        <Route path="/cupones" element={
+                            <Suspense fallback='Cargando Componente: Coupons'>
+                                <Coupons />
+                            </Suspense>
+                        }/>
                     </Routes>
                 </BrowserRouter>
             </QueryClientProvider>
