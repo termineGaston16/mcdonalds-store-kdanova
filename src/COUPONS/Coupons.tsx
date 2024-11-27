@@ -13,7 +13,7 @@ export default function Coupons() {
         queryFn: async () => await getCupons(cupounsLocal.length),
         cacheTime: 0,
         initialData: [],
-        onError: () => { setCupounsLocal(cupounsLocal) },
+        onError: () => { alert('Ocurrió un error: onError') },
         onSuccess: (newResults) => { setCupounsLocal(prevState => [...prevState, ...newResults]) },
         refetchInterval: false,
         refetchOnWindowFocus: false,

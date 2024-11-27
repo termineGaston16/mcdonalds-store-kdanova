@@ -19,11 +19,13 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
     const { isError, isLoading, refetch } = useQuery({
         queryKey: ['category', category, query],
         queryFn: async () => {
-            if(query) {
+            if (query) {
                 const newQuery = filterQuery(query)
-                if(newQuery) return await getProductsByQuery(query, resultLocal.length)
+                if (newQuery) {
+                    return await getProductsByQuery(query, resultLocal.length)
+                }
             }
-            
+
             if (!category) return await getProductsByCategory(undefined, resultLocal.length);
             return await getProductsByCategory(category, resultLocal.length);
         },
@@ -32,7 +34,7 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
             return setResultLocal(prevState => [...prevState, ...newResults]);
         },
         onError: () => {
-            alert('Ocurrió un error');
+            alert('Ocurrió un error: onError')
         },
         cacheTime: 0,
         initialData: [],
@@ -57,9 +59,8 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
             .toLocaleLowerCase()
             .trim()
             .replace(/[^\w\s]/g, '')
-    
-        if(newQuery.length > 0) return newQuery
-        alert('Ingresa un texto válido')
+
+        if (newQuery.length > 0) return newQuery
         return undefined
     }
 
@@ -69,9 +70,9 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                 <h2 className="products__title">
                     {category.charAt(0).toLocaleUpperCase() + category.slice(1).toLocaleLowerCase()}
                 </h2>
-            ) : (
-                <h2 className="products__title">Todos nuestros Productos</h2>
-            )}
+            ) : query ? (
+                (<h2 className="products__title">Buscar: {query.toLocaleLowerCase()}</h2>)
+            ) : (<h2 className="products__title">Todos nuestros Productos</h2>)}
 
             {resultLocal.length < 1 && !isLoading && !isError && <span>No hay resultados...</span>}
             {isLoading && <span>Cargando recursos...</span>}
