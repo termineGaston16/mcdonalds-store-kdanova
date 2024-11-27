@@ -13,7 +13,8 @@ export default function App() {
     const [resultLocal, setResultLocal] = useState<Product[]>([])
     const query = new QueryClient()
 
-    const Coupons = lazy(()=> import('./COUPONS/Coupons'))
+    const Coupons = lazy(() => import('./COUPONS/Coupons'))
+    const Search = lazy(()=> import('./SEARCH/Search'))
 
     return (
         <Provider store={store}>
@@ -26,12 +27,19 @@ export default function App() {
                     <Routes>
                         <Route path="*" element='Error 404' />
 
-                        <Route path="/:key?" element={<Products resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
+                        <Route path="/" element={<Products resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
+                        <Route path="/categoria/:category" element={<Products resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
+                        <Route path="/buscar/:query" element={<Products resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
                         <Route path="/cupones" element={
                             <Suspense fallback='Cargando Componente: Coupons'>
                                 <Coupons />
                             </Suspense>
-                        }/>
+                        } />
+                        <Route path="/buscar" element={
+                            <Suspense fallback='Cargando Elemento: Search'>
+                                <Search />
+                            </Suspense>
+                        } />
                     </Routes>
                 </BrowserRouter>
             </QueryClientProvider>

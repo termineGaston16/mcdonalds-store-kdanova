@@ -65,3 +65,13 @@ export async function getCupons(couponsLength: number): Promise<Coupon<CouponFix
         throw error
     }
 }
+
+// OBTENER RESULTADOS SEGÚN EL QUERY
+export async function getProductsByQuery(query: string, indexResults: number):Promise<Product[]>{
+    try {
+        return PRODUCTS.filter(products => products.name.toLocaleLowerCase().includes(query)).slice(indexResults, indexResults + 4)
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}

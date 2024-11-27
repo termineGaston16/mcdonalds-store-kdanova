@@ -47,10 +47,10 @@ const NavBar: React.FC<Props> = ({ setResultLocal }) => {
             {isError && <span>Ocurrió un error</span>}
             {categories.size > 0 && Array.from(categories).map(([key, value], index) => (
                 <Link
-                    onClick={() => emptyResults(`/${key}`)}
+                    onClick={() => emptyResults(`/categoria/${key}`)}
                     className="nav-bar__list__item__link"
                     key={index}
-                    to={`/${key}`}
+                    to={`/categoria/${key}`}
                 >
                     <li className="nav-bar__list__item">
                         <img

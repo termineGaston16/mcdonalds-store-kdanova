@@ -1,11 +1,10 @@
 import { useQuery } from "react-query";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getProductsByCategory } from "../FIREBASE";
+import { useParams } from "react-router-dom";
+import { getProductsByCategory, getProductsByQuery } from "../FIREBASE";
 import { useCallback, useRef, useState } from "react";
 import './Style/products.css';
 import { Product } from "../FIREBASE/interface";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { BiSearchAlt } from "react-icons/bi";
 
 interface Props {
     resultLocal: Product[]
@@ -13,18 +12,20 @@ interface Props {
 }
 
 const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
-    const { key } = useParams();
+
+    const { category, query } = useParams();
     const [productOpen, setProductOpen] = useState<Product | null>(null)
-    const location = useLocation()
-    const navigate = useNavigate()
 
     const { isError, isLoading, refetch } = useQuery({
-        queryKey: ['category', key],
+        queryKey: ['category', category, query],
         queryFn: async () => {
-            if(key?.includes('buscar=')) console.log(true);
+            if(query) {
+                const newQuery = filterQuery(query)
+                if(newQuery) return await getProductsByQuery(query, resultLocal.length)
+            }
             
-            if (!key) return await getProductsByCategory(undefined, resultLocal.length);
-            return await getProductsByCategory(key, resultLocal.length);
+            if (!category) return await getProductsByCategory(undefined, resultLocal.length);
+            return await getProductsByCategory(category, resultLocal.length);
         },
         onSuccess: (newResults) => {
             if (resultLocal.length < 1) return setResultLocal(newResults)
@@ -51,17 +52,22 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
         if (node) resultsObserver.current.observe(node);
     }, [isLoading, refetch]);
 
-    const performSearch =(e: React.FormEvent<HTMLFormElement>)=>{
-        e.preventDefault()
-        const query = new FormData(e.currentTarget).get('searchQuery')
-        navigate(`/buscar=${query}`)
+    const filterQuery = (queryParam: string): undefined | string => {
+        const newQuery = queryParam
+            .toLocaleLowerCase()
+            .trim()
+            .replace(/[^\w\s]/g, '')
+    
+        if(newQuery.length > 0) return newQuery
+        alert('Ingresa un texto válido')
+        return undefined
     }
 
     return (
         <main className="products">
-            {key ? (
+            {category ? (
                 <h2 className="products__title">
-                    {key.charAt(0).toLocaleUpperCase() + key.slice(1).toLocaleLowerCase()}
+                    {category.charAt(0).toLocaleUpperCase() + category.slice(1).toLocaleLowerCase()}
                 </h2>
             ) : (
                 <h2 className="products__title">Todos nuestros Productos</h2>
@@ -71,7 +77,7 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
             {isLoading && <span>Cargando recursos...</span>}
             {isError && <span>Ocurrió un error inesperado</span>}
 
-            <ul className="products__list">
+            {resultLocal.length > 0 && <ul className="products__list">
                 {resultLocal.map((products, index) => (
                     <li
                         className="products__list__item"
@@ -89,7 +95,7 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                         <span className="products__list__item__name">{products.name}</span>
                     </li>
                 ))}
-            </ul>
+            </ul>}
 
             {productOpen && <div className="productOpen__content">
                 <div className="productOpen">
@@ -140,15 +146,6 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                     </section>
                 </div>
             </div>}
-
-            {location.pathname === '/buscar' &&
-                <div>
-                    <form onSubmit={performSearch}>
-                        <h5>¡Buscador de Mcdonalds!</h5>
-                        <input type="search" name="searchQuery"/>
-                        <button type="submit"><BiSearchAlt /></button>
-                    </form>
-                </div>}
         </main>
     );
 }
