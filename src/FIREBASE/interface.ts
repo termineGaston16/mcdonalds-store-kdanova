@@ -27,7 +27,6 @@ export interface ProductsInCart {
     description: Product['description']
     price: Product['price']
     stockInCart: number
-    chosenSize: number
 }
 
 export interface Coupon<T> {

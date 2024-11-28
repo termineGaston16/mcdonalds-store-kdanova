@@ -15,6 +15,7 @@ export default function App() {
 
     const Coupons = lazy(() => import('./COUPONS/Coupons'))
     const Search = lazy(()=> import('./SEARCH/Search'))
+    const Cart = lazy(()=> import('./CART/Cart'))
 
     return (
         <Provider store={store}>
@@ -38,6 +39,11 @@ export default function App() {
                         <Route path="/buscar" element={
                             <Suspense fallback='Cargando Elemento: Search'>
                                 <Search />
+                            </Suspense>
+                        } />
+                        <Route path="/carrito" element={
+                            <Suspense fallback='Cargando Elemento: Cart'>
+                                <Cart />
                             </Suspense>
                         } />
                     </Routes>

@@ -5,6 +5,7 @@ import { useCallback, useRef, useState } from "react";
 import './Style/products.css';
 import { Product } from "../FIREBASE/interface";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import ButtonGoCart from "../CART/Element/ButtonGoCart";
 
 interface Props {
     resultLocal: Product[]
@@ -73,6 +74,7 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
             ) : query ? (
                 (<h2 className="products__title">Buscar: {query.toLocaleLowerCase()}</h2>)
             ) : (<h2 className="products__title">Todos nuestros Productos</h2>)}
+            <ButtonGoCart />
 
             {resultLocal.length < 1 && !isLoading && !isError && <span>No hay resultados...</span>}
             {isLoading && <span>Cargando recursos...</span>}

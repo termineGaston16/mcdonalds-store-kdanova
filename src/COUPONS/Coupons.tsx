@@ -3,6 +3,8 @@ import { CiCircleAlert } from "react-icons/ci";
 import { useQuery } from "react-query";
 import { Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage } from "../FIREBASE/interface";
 import { getCupons } from "../FIREBASE";
+import ButtonGoCart from "../CART/Element/ButtonGoCart";
+import { toast, Toaster } from "sonner";
 
 export default function Coupons() {
 
@@ -38,12 +40,15 @@ export default function Coupons() {
     return (<main>
         <h3>¡Disfruta de nuestros descuentos especiales!</h3>
         <span><CiCircleAlert /> <br /> sólo es permitido obtener un cupón por cada compra</span>
+        <ButtonGoCart />
 
+        <div>
+        </div>
         <ul>
             {cupounsLocal.map((cupons, index) => (
-                <li 
-                ref={index === cupounsLocal.length -1 ? observerFc : null}
-                key={index} style={{border:'1px solid red', margin:'100px'}}>
+                <li
+                    ref={index === cupounsLocal.length - 1 ? observerFc : null}
+                    key={index} style={{ border: '1px solid red', margin: '100px' }}>
                     <img src={cupons.img} alt={cupons.name.toLocaleUpperCase()} />
                     <h2>{cupons.name}</h2>
                     <p>{cupons.description}</p>

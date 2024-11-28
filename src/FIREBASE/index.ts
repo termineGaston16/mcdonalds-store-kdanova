@@ -1,5 +1,5 @@
-import { COUPONS, PRODUCTS } from "../DATABASE";
-import { Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage, Product } from "./interface";
+import { CART, COUPONS, PRODUCTS } from "../DATABASE";
+import { Cart, Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage, Product } from "./interface";
 
 
 
@@ -59,7 +59,7 @@ export async function getCupons(couponsLength: number): Promise<Coupon<CouponFix
             products: cupon.products,
             type: cupon.type
         } as Coupon<CouponFixed | CouponPercentage | CouponFixedDiscount | CouponBogo>)).slice(couponsLength, couponsLength + 4)
-        
+
     } catch (error) {
         console.error(error)
         throw error
@@ -67,11 +67,27 @@ export async function getCupons(couponsLength: number): Promise<Coupon<CouponFix
 }
 
 // OBTENER RESULTADOS SEGÚN EL QUERY
-export async function getProductsByQuery(query: string, indexResults: number):Promise<Product[]>{
+export async function getProductsByQuery(query: string, indexResults: number): Promise<Product[]> {
     try {
         return PRODUCTS.filter(products => products.name.toLocaleLowerCase().includes(query)).slice(indexResults, indexResults + 4)
     } catch (error) {
         console.error(error)
+        throw error
+    }
+}
+
+// OBTENER DATOS DEL CARRITO
+export async function getCart(): Promise<Cart> {
+
+    try {
+        return {
+            content: CART.content,
+            packaging: CART.packaging,
+            priceTotal: CART.priceTotal
+        } as Cart
+        
+    } catch (error) {
+        console.error
         throw error
     }
 }
