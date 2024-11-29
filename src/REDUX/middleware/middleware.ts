@@ -4,16 +4,15 @@ import { getCart } from "../../FIREBASE";
 // OBTENER DATOS DEL CARRITO
 const getCartMiddleware: Middleware = (store) => (next) => async (action: any) => {
 
-    const { type } = action
-
     next(action)
+    const { type } = action
 
     if (type === 'cart/getCart') {
         store.dispatch({ type: 'cart/isLoading', payload: true })
 
         try {
             const result = await getCart()
-           
+            store.dispatch({ type: 'cart/updateCart', payload: result })
         } catch (error) {
             store.dispatch({ type: 'cart/isError', payload: true })
         } finally {

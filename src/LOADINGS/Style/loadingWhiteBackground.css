@@ -1,0 +1,44 @@
+.loadingWhiteBackground__background{
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    background-color: rgba(0, 0, 0, 0.668);
+    z-index: 2;
+}
+
+.loadingWhiteBackground__container{
+    width: 70px;
+    height: 70px;
+
+    background-color: rgba(0, 0, 0, 0.707);
+    border-radius: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.loadingWhiteBackground__container__logo {
+    width: 30px;
+    height: 30px;
+    animation: rotate .3s linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

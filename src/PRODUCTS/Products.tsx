@@ -6,6 +6,7 @@ import './Style/products.css';
 import { Product } from "../FIREBASE/interface";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import ButtonGoCart from "../CART/Element/ButtonGoCart";
+import { toast, Toaster } from "sonner";
 
 interface Props {
     resultLocal: Product[]
@@ -35,7 +36,7 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
             return setResultLocal(prevState => [...prevState, ...newResults]);
         },
         onError: () => {
-            alert('Ocurrió un error: onError')
+            toast.error('Ocurrió un error con: getProductsByQuery || getProductsByCategory')
         },
         cacheTime: 0,
         initialData: [],
@@ -149,6 +150,7 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                     </section>
                 </div>
             </div>}
+            <Toaster />
         </main>
     );
 }

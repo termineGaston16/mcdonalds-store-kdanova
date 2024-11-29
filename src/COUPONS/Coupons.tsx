@@ -15,7 +15,7 @@ export default function Coupons() {
         queryFn: async () => await getCupons(cupounsLocal.length),
         cacheTime: 0,
         initialData: [],
-        onError: () => { alert('Ocurrió un error: onError') },
+        onError: () => { toast.error('Ocurrió un error con: getProductsByQuery || getProductsByCategory') },
         onSuccess: (newResults) => { setCupounsLocal(prevState => [...prevState, ...newResults]) },
         refetchInterval: false,
         refetchOnWindowFocus: false,
@@ -58,5 +58,6 @@ export default function Coupons() {
         {isLoading && <span>Cargando Cupones...</span>}
         {isError && <span>Error al cargar</span>}
         {cupounsLocal.length < 1 && !isLoading && !isError && <span>No hay cupones disponibles...</span>}
+        <Toaster />
     </main>)
 }

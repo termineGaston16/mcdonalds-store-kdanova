@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom"
 
-export default function ButtonsInCart(){
+interface Props{
+    priceTotal: number
+}
+
+const ButtonsInCart:React.FC<Props> =({priceTotal})=>{
     const navigate = useNavigate()
 
     return(<div>
@@ -9,6 +13,8 @@ export default function ButtonsInCart(){
         type="button">Volver</button>
         <button type="button">Vaciar</button>
         <button type="button">Finalizar compra</button>
-        <span>Precio Total: $0</span>
+        <span>Precio Total: ${priceTotal}</span>
     </div>)
 }
+
+export default ButtonsInCart

@@ -42,7 +42,7 @@ export default function App() {
                             </Suspense>
                         } />
                         <Route path="/carrito" element={
-                            <Suspense fallback='Cargando Elemento: Cart'>
+                            <Suspense fallback='Cargando Componente: Cart'>
                                 <Cart />
                             </Suspense>
                         } />

@@ -22,6 +22,9 @@ export const cartSlice = createSlice({
         },
         isError: (state, action: PayloadAction<boolean>) => {
             state.isError = action.payload
+        },
+        updateCart: (state, action: PayloadAction<Cart>) => {
+            state.data = action.payload
         }
     }
 })

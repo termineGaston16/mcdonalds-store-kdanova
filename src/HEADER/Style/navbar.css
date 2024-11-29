@@ -43,6 +43,7 @@
     width: 10px;
     height: auto;
 }
+
 .nav-bar__list::-webkit-scrollbar-thumb{
     background: radial-gradient(circle at 30% 60%, red, blue);
 }
