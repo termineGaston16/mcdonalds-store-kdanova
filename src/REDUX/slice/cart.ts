@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Cart } from "../../FIREBASE/interface";
+import { Cart, ProductsInCart } from "../../FIREBASE/interface";
 
 export interface CartLocal {
     data: null | Cart,
@@ -25,6 +25,9 @@ export const cartSlice = createSlice({
         },
         updateCart: (state, action: PayloadAction<Cart>) => {
             state.data = action.payload
+        },
+        addProduct: (state, action: PayloadAction<ProductsInCart>) => {
+           
         }
     }
 })

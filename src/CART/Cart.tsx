@@ -8,14 +8,10 @@ export default function Cart() {
 
     const dispatch = useAppDispatch()
     const { data, isError, isLoading } = useAppSelector(state => state.cartOfRedux)
-
-    useEffect(() => {
-        dispatch({ type: 'cart/getCart' })
-    }, [])
-
-    useEffect(() => {
-        if (isError) toast.error('Error al obtener el carrito')
-    }, [isError])
+    console.log(data);
+    
+    useEffect(() => {dispatch({ type: 'cart/getCart' })}, [])
+    useEffect(() => {if (isError) toast.error('Error al obtener el carrito')}, [isError])
 
     return (<main>
         <h3>Tu Carrito</h3>

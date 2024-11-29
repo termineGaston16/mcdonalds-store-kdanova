@@ -1,5 +1,6 @@
+import { toast } from "sonner";
 import { CART, COUPONS, PRODUCTS } from "../DATABASE";
-import { Cart, Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage, Product } from "./interface";
+import { Cart, Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage, Product, ProductsInCart } from "./interface";
 
 
 
@@ -88,6 +89,26 @@ export async function getCart(): Promise<Cart> {
         
     } catch (error) {
         console.error
+        throw error
+    }
+}
+
+// SUBIR PRODUCTOS AL CARRITO
+export async function addProductToCart(productInCartLocal: ProductsInCart) {
+    try {
+        const {priceFinal, productId, quantityProductLocal} = productInCartLocal
+
+        if(CART.content.some(prod => prod.productId === productId)){
+            const index = CART.content.findIndex(prod => prod.productId === productId)
+            CART.content[index].priceFinal += priceFinal
+            CART.content[index].quantityProductLocal += quantityProductLocal
+        }else{
+            CART.content.push(productInCartLocal)
+        }
+
+    } catch (error) {
+        toast.error('Error al subir producto')
+        console.error(error)
         throw error
     }
 }

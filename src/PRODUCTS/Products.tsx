@@ -7,6 +7,9 @@ import { Product } from "../FIREBASE/interface";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import ButtonGoCart from "../CART/Element/ButtonGoCart";
 import { toast, Toaster } from "sonner";
+import LoadingWhiteBackground from "../LOADINGS/LoadingWhitBackground";
+import useCart from "../CART/customHook/useCart";
+import { useAppSelector } from "../REDUX/hooks/useStore";
 
 interface Props {
     resultLocal: Product[]
@@ -16,9 +19,16 @@ interface Props {
 const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
 
     const { category, query } = useParams();
-    const [productOpen, setProductOpen] = useState<Product | null>(null)
+    const {data} = useAppSelector(state => state.cartOfRedux)
+    console.log(data);
+    
+    const { addIndividualProductQuantity, subtractIndividualProductQuantity, addProductToCart } = useCart()
 
-    const { isError, isLoading, refetch } = useQuery({
+    const [productOpen, setProductOpen] = useState<Product | null>(null)
+    const [quantityProductLocal, setQuantityProductLocal] = useState<number>(0)
+    const [aditionalPriceLocal, setAditionalPriceLocal] = useState<number>(0)
+
+    const { isLoading, refetch } = useQuery({
         queryKey: ['category', category, query],
         queryFn: async () => {
             if (query) {
@@ -47,6 +57,7 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
     });
 
     const resultsObserver = useRef<null | IntersectionObserver>(null);
+
     const resultsCallback = useCallback((node: null | HTMLElement) => {
         if (isLoading) return;
         if (resultsObserver.current) resultsObserver.current.disconnect();
@@ -75,31 +86,31 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
             ) : query ? (
                 (<h2 className="products__title">Buscar: {query.toLocaleLowerCase()}</h2>)
             ) : (<h2 className="products__title">Todos nuestros Productos</h2>)}
+
             <ButtonGoCart />
 
-            {resultLocal.length < 1 && !isLoading && !isError && <span>No hay resultados...</span>}
-            {isLoading && <span>Cargando recursos...</span>}
-            {isError && <span>Ocurrió un error inesperado</span>}
-
-            {resultLocal.length > 0 && <ul className="products__list">
-                {resultLocal.map((products, index) => (
-                    <li
-                        className="products__list__item"
-                        onClick={() => setProductOpen(products)}
-                        key={index}
-                        ref={index === resultLocal.length - 1 ? resultsCallback : null}
-                    >
-                        <span className="products__list__item__price">${products.price}</span>
-                        <img
-                            className="products__list__item__img"
-                            src={products.img}
-                            alt={products.name.toLocaleUpperCase()}
-                            loading="lazy"
-                        />
-                        <span className="products__list__item__name">{products.name}</span>
-                    </li>
-                ))}
-            </ul>}
+            {isLoading && <LoadingWhiteBackground />}
+            {resultLocal.length > 0
+                &&
+                <ul className="products__list">
+                    {resultLocal.map((products, index) => (
+                        <li
+                            className="products__list__item"
+                            onClick={() => setProductOpen(products)}
+                            key={index}
+                            ref={index === resultLocal.length - 1 ? resultsCallback : null}
+                        >
+                            <span className="products__list__item__price">${products.price}</span>
+                            <img
+                                className="products__list__item__img"
+                                src={products.img}
+                                alt={products.name.toLocaleUpperCase()}
+                                loading="lazy"
+                            />
+                            <span className="products__list__item__name">{products.name}</span>
+                        </li>
+                    ))}
+                </ul>}
 
             {productOpen && <div className="productOpen__content">
                 <div className="productOpen">
@@ -113,11 +124,14 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                         <button
                             className="productOpen__close"
                             type="button"
-                            onClick={() => setProductOpen(null)}>Cerrar</button>
+                            onClick={() => {
+                                setProductOpen(null) 
+                                setQuantityProductLocal(0)
+                            }}>Cerrar</button>
 
                         <p className="productOpen__face-two__description">{productOpen.description}</p>
 
-                        <span className="productOpen__face-two__price">${productOpen.price}</span>
+                        <span className="productOpen__face-two__price">${(productOpen.price + aditionalPriceLocal).toFixed(2)}</span>
 
                         {productOpen.stock > 0
                             ?
@@ -127,23 +141,61 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                                     <legend className="productOpen__face-two__interaction-cart__title">Añade este producto al carrito</legend>
 
                                     <div className="productOpen__face-two__interaction-cart__buttons">
-                                        <button className="productOpen__face-two__interaction-cart__btn" type="button">{"<"}</button>
-                                        <span className="productOpen__face-two__interaction-cart__amount">0</span>
-                                        <button className="productOpen__face-two__interaction-cart__btn" type="button">{">"}</button>
+                                        <button
+                                            onClick={() => subtractIndividualProductQuantity(
+                                                quantityProductLocal,
+                                                setQuantityProductLocal
+                                            )}
+                                            className="productOpen__face-two__interaction-cart__btn"
+                                            type="button">
+                                            {"<"}
+                                        </button>
+
+                                        <span className="productOpen__face-two__interaction-cart__amount">{quantityProductLocal}</span>
+
+                                        <button
+                                            onClick={() => addIndividualProductQuantity(
+                                                quantityProductLocal,
+                                                productOpen.stock,
+                                                setQuantityProductLocal
+                                            )}
+                                            className="productOpen__face-two__interaction-cart__btn"
+                                            type="button">
+                                            {">"}
+                                        </button>
                                     </div>
 
                                     {productOpen.options && <div>
                                         <ul>
                                             {productOpen.options.sizes.map((options, index) => (
                                                 <li key={index}>
-                                                    <span>+${options.additionalPrice}</span>
-                                                    <span>{options.size}</span>
+                                                    <input type="radio"
+                                                        defaultChecked={index === 0}
+                                                        id={`productOpenOption_${index + 1}`}
+                                                        name="productOpenOption"
+                                                        onChange={() => setAditionalPriceLocal(options.additionalPrice)}
+                                                    />
+
+                                                    <label htmlFor={`productOpenOption_${index + 1}`}>
+                                                        <span>+${options.additionalPrice}</span>
+                                                        <span>{options.size}</span>
+                                                    </label>
                                                 </li>
                                             ))}
                                         </ul>
                                     </div>}
 
-                                    <button className="productOpen__face-two__interaction-cart__btn-add" type="button">Añadir <IoMdAddCircleOutline /></button>
+                                    <button
+                                        style={{ opacity: (quantityProductLocal > 0 ? `1` : '.5') }}
+                                        onClick={()=> addProductToCart(
+                                            productOpen.id,
+                                            quantityProductLocal,
+                                            (productOpen.price + aditionalPriceLocal)
+                                        )}
+                                        className="productOpen__face-two__interaction-cart__btn-add"
+                                        type="button">
+                                        Añadir <IoMdAddCircleOutline />
+                                    </button>
                                 </fieldset> </>
                             :
                             <span className="productOpen__face-two__no-stock">Lo sentimos pero no hay más cantidades de momento.</span>}

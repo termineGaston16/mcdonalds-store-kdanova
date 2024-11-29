@@ -21,12 +21,9 @@ export interface Cart {
 }
 
 export interface ProductsInCart {
-    id: Product['id'],
-    name: Product['name']
-    img: Product['img']
-    description: Product['description']
-    price: Product['price']
-    stockInCart: number
+    productId: Product['id'],
+    quantityProductLocal: number,
+    priceFinal: number
 }
 
 export interface Coupon<T> {
