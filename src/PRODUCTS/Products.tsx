@@ -19,9 +19,10 @@ interface Props {
 const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
 
     const { category, query } = useParams();
-    const {data} = useAppSelector(state => state.cartOfRedux)
-    console.log(data);
+    const { data } = useAppSelector(state => state.cartOfRedux)
+    console.log();
     
+
     const { addIndividualProductQuantity, subtractIndividualProductQuantity, addProductToCart } = useCart()
 
     const [productOpen, setProductOpen] = useState<Product | null>(null)
@@ -125,7 +126,7 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                             className="productOpen__close"
                             type="button"
                             onClick={() => {
-                                setProductOpen(null) 
+                                setProductOpen(null)
                                 setQuantityProductLocal(0)
                             }}>Cerrar</button>
 
@@ -187,7 +188,7 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
 
                                     <button
                                         style={{ opacity: (quantityProductLocal > 0 ? `1` : '.5') }}
-                                        onClick={()=> addProductToCart(
+                                        onClick={() => addProductToCart(
                                             productOpen.id,
                                             quantityProductLocal,
                                             (productOpen.price + aditionalPriceLocal)

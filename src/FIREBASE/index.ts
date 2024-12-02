@@ -86,7 +86,7 @@ export async function getCart(): Promise<Cart> {
             packaging: CART.packaging,
             priceTotal: CART.priceTotal
         } as Cart
-        
+
     } catch (error) {
         console.error
         throw error
@@ -96,13 +96,13 @@ export async function getCart(): Promise<Cart> {
 // SUBIR PRODUCTOS AL CARRITO
 export async function addProductToCart(productInCartLocal: ProductsInCart) {
     try {
-        const {priceFinal, productId, quantityProductLocal} = productInCartLocal
+        const { priceFinal, productId, quantityProductLocal } = productInCartLocal
 
-        if(CART.content.some(prod => prod.productId === productId)){
+        if (CART.content.some(prod => prod.productId === productId)) {
             const index = CART.content.findIndex(prod => prod.productId === productId)
             CART.content[index].priceFinal += priceFinal
             CART.content[index].quantityProductLocal += quantityProductLocal
-        }else{
+        } else {
             CART.content.push(productInCartLocal)
         }
 

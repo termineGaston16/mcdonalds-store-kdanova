@@ -31,7 +31,7 @@ const addProductToCartMiddleware: Middleware = (store) => (next) => async (actio
 
     if (type === 'cart/addProductToCart') {
         store.dispatch({ type: 'cart/addProduct', payload: payload })
-
+        
         try {
             await addProductToCart(payload)
             toast.success('Producto añadido!')
