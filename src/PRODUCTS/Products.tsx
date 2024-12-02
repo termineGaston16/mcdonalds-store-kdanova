@@ -9,7 +9,6 @@ import ButtonGoCart from "../CART/Element/ButtonGoCart";
 import { toast, Toaster } from "sonner";
 import LoadingWhiteBackground from "../LOADINGS/LoadingWhitBackground";
 import useCart from "../CART/customHook/useCart";
-import { useAppSelector } from "../REDUX/hooks/useStore";
 
 interface Props {
     resultLocal: Product[]
@@ -19,10 +18,6 @@ interface Props {
 const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
 
     const { category, query } = useParams();
-    const { data } = useAppSelector(state => state.cartOfRedux)
-    console.log();
-    
-
     const { addIndividualProductQuantity, subtractIndividualProductQuantity, addProductToCart } = useCart()
 
     const [productOpen, setProductOpen] = useState<Product | null>(null)
@@ -188,11 +183,17 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
 
                                     <button
                                         style={{ opacity: (quantityProductLocal > 0 ? `1` : '.5') }}
-                                        onClick={() => addProductToCart(
-                                            productOpen.id,
-                                            quantityProductLocal,
-                                            (productOpen.price + aditionalPriceLocal)
-                                        )}
+                                        onClick={() => {
+                                            if (quantityProductLocal < 1) return
+
+                                            addProductToCart(
+                                                productOpen.id,
+                                                quantityProductLocal,
+                                                (productOpen.price + aditionalPriceLocal)
+                                            )
+                                            setProductOpen(null)
+                                            setQuantityProductLocal(0)
+                                        }}
                                         className="productOpen__face-two__interaction-cart__btn-add"
                                         type="button">
                                         Añadir <IoMdAddCircleOutline />
@@ -203,7 +204,8 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                     </section>
                 </div>
             </div>}
-            <Toaster />
+
+            <Toaster position="bottom-center" />
         </main>
     );
 }

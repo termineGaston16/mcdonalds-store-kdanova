@@ -1,6 +1,5 @@
 import { Middleware } from "@reduxjs/toolkit";
 import { addProductToCart, getCart } from "../../FIREBASE";
-import { toast } from "sonner";
 
 // OBTENER DATOS DEL CARRITO
 const getCartMiddleware: Middleware = (store) => (next) => async (action: any) => {
@@ -34,7 +33,6 @@ const addProductToCartMiddleware: Middleware = (store) => (next) => async (actio
         
         try {
             await addProductToCart(payload)
-            toast.success('Producto añadido!')
         } catch (error) {
             store.dispatch({ type: 'cart/addProduct__REMOVE', payload: payload })
         }

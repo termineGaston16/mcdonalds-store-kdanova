@@ -77,7 +77,7 @@ export async function getProductsByQuery(query: string, indexResults: number): P
     }
 }
 
-// OBTENER DATOS DEL CARRITO
+// OBTENER DATOS DEL CARRITO (REFERENCIA)
 export async function getCart(): Promise<Cart> {
 
     try {
@@ -96,18 +96,24 @@ export async function getCart(): Promise<Cart> {
 // SUBIR PRODUCTOS AL CARRITO
 export async function addProductToCart(productInCartLocal: ProductsInCart) {
     try {
-        const { priceFinal, productId, quantityProductLocal } = productInCartLocal
 
-        if (CART.content.some(prod => prod.productId === productId)) {
-            const index = CART.content.findIndex(prod => prod.productId === productId)
-            CART.content[index].priceFinal += priceFinal
-            CART.content[index].quantityProductLocal += quantityProductLocal
+        const { priceFinal, productId, quantityProductLocal } = productInCartLocal
+        const productInCart = CART.content.some(prod => prod.productId === productId)
+
+        if (productInCart) {
+            const indexProductInCart = CART.content.findIndex(prod => prod.productId === productId)
+            CART.content[indexProductInCart].quantityProductLocal += quantityProductLocal
         } else {
-            CART.content.push(productInCartLocal)
+            CART.content = [...CART.content, { productId, priceFinal, quantityProductLocal }];
         }
 
+        CART.priceTotal += (priceFinal * quantityProductLocal)
+        toast.success(`Product: [${productId}] subido correctamente al carrito en la base de datos`)
+
     } catch (error) {
-        toast.error('Error al subir producto')
+        const { productId } = productInCartLocal
+
+        toast.error(`Product: [${productId}] no fue posible subir al carrito en la base de datos`)
         console.error(error)
         throw error
     }

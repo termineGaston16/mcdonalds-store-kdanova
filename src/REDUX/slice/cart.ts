@@ -27,8 +27,38 @@ export const cartSlice = createSlice({
             state.data = action.payload
         },
         addProduct: (state, action: PayloadAction<ProductsInCart>) => {
-           console.log(2);
-           
+
+            if (!state.data) throw new Error('Data es null')
+
+            const { priceFinal, productId, quantityProductLocal } = action.payload
+            const { content } = state.data
+            const productInCart = content.some(prod => prod.productId === productId)
+
+            if (productInCart) {
+                const indexProductInCart = content.findIndex(prod => prod.productId === productId)
+                if (indexProductInCart < 0) throw new Error('indexProductInCart no encontrado')
+
+                content[indexProductInCart].quantityProductLocal += quantityProductLocal
+            } else {
+                content.push({
+                    priceFinal: priceFinal,
+                    productId: productId,
+                    quantityProductLocal: quantityProductLocal
+                })
+            }
+
+            state.data.priceTotal += (priceFinal * quantityProductLocal)
+        },
+        addProduct__REMOVE: (state, action: PayloadAction<ProductsInCart>) => {
+
+            if (!state.data) throw new Error('Data es null')
+
+            const { productId } = action.payload
+            const { content } = state.data
+
+            const indexProductInCart = content.findIndex(prod => prod.productId === productId)
+            if (indexProductInCart < 0) throw new Error('indexProductInCart no encontrado')
+            content.splice(indexProductInCart, 1)
         }
     }
 })
