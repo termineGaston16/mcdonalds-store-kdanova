@@ -30,7 +30,7 @@ export const cartSlice = createSlice({
 
             if (!state.data) throw new Error('Data es null')
 
-            const { priceFinal, productId, quantityProductLocal } = action.payload
+            const { priceFinal, productId, quantityProductLocal, type } = action.payload
             const { content } = state.data
             const productInCart = content.some(prod => prod.productId === productId)
 
@@ -43,11 +43,16 @@ export const cartSlice = createSlice({
                 content.push({
                     priceFinal: priceFinal,
                     productId: productId,
-                    quantityProductLocal: quantityProductLocal
+                    quantityProductLocal: quantityProductLocal,
+                    type: type
                 })
             }
 
-            state.data.priceTotal += (priceFinal * quantityProductLocal)
+            if (type === 'COUPONS') {
+                state.data.priceTotal += priceFinal
+            } else {
+                state.data.priceTotal += (priceFinal * quantityProductLocal)
+            }
         },
         addProduct__REMOVE: (state, action: PayloadAction<ProductsInCart>) => {
 
@@ -65,7 +70,7 @@ export const cartSlice = createSlice({
             if (!state.data) throw new Error('Data es null')
 
             const { payload } = action
-            state.data.packaging = payload  
+            state.data.packaging = payload
         }
     }
 })

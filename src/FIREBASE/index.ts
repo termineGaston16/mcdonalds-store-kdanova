@@ -120,12 +120,57 @@ export async function addProductToCart(productInCartLocal: ProductsInCart) {
 }
 
 // CAMBIAR EL MÉTODO DE EMPAQUETADO
-export async function choosePackaging(type: "EAT HERE" | "CARRY" | null){
+export async function choosePackaging(type: "EAT HERE" | "CARRY" | null) {
     try {
         CART.packaging = type
     } catch (error) {
         console.error(error)
         toast.error('Error al cambiar método de empaquetado')
+        throw error
+    }
+}
+
+// CARGAR CUPÓN
+export async function loadCoupon(idCoupon: string): Promise<ProductsInCart[]> {
+    try {
+        const { content } = CART
+        const searchCoupon = content.some(prod => prod.type === 'COUPONS')
+        const couponFound = COUPONS.find(coup => coup.id === idCoupon)
+
+        const productsAReturns: ProductsInCart[] = []
+
+        if (searchCoupon) {
+            toast.error('Ya existe un cupón registrado')
+            throw new Error()
+        }
+
+        if (!couponFound) {
+            toast.error('Cupón no encontrado')
+            throw new Error()
+        }
+
+        switch (couponFound?.type.type) {
+            case 'fixed':
+
+                const chosenProducts = PRODUCTS.filter(prod => couponFound.products.some(idProd => idProd === prod.id));
+                chosenProducts.forEach((prod, index) => {
+                    productsAReturns.push({
+                        priceFinal: index === 0 ? (couponFound as Coupon<CouponFixed>).type.finalPrice : 0,
+                        productId: prod.id,
+                        quantityProductLocal: 1,
+                        type: 'COUPONS'
+                    })
+                })
+
+                break;
+
+            default:
+                break;
+        }
+
+        return productsAReturns
+
+    } catch (error) {
         throw error
     }
 }

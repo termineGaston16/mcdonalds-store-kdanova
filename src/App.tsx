@@ -19,9 +19,9 @@ function AppContent() {
     const Cart = lazy(() => import('./CART/Cart'));
 
     const dispatch = useAppDispatch();
-    const { isError } = useAppSelector(state => state.cartOfRedux)
-
-
+    const { isError, data } = useAppSelector(state => state.cartOfRedux)
+    console.log(data);
+    
     useEffect(() => { dispatch({ type: 'cart/getCart' }); }, []);
     useEffect(() => { if (isError) toast(<div>Error al obtener carrito</div>) }, [isError])
 

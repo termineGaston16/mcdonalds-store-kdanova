@@ -23,7 +23,8 @@ export interface Cart {
 export interface ProductsInCart {
     productId: Product['id'],
     quantityProductLocal: number,
-    priceFinal: number
+    priceFinal: number,
+    type?: 'COUPONS'
 }
 
 export interface Coupon<T> {

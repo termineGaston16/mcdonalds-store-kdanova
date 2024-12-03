@@ -1,5 +1,6 @@
 import { Middleware } from "@reduxjs/toolkit";
-import { addProductToCart, choosePackaging, getCart } from "../../FIREBASE";
+import { addProductToCart, choosePackaging, getCart, loadCoupon } from "../../FIREBASE";
+import { toast } from "sonner";
 
 // OBTENER DATOS DEL CARRITO
 const getCartMiddleware: Middleware = (store) => (next) => async (action: any) => {
@@ -45,15 +46,38 @@ const choosePackagingMiddleware: Middleware = (store) => (next) => async (action
     next(action)
     const { type, payload } = action
 
-    if(type === 'cart/choosePackaging'){
-        store.dispatch({type:'cart/packaging', payload: payload})
+    if (type === 'cart/choosePackaging') {
+        store.dispatch({ type: 'cart/packaging', payload: payload })
         try {
             await choosePackaging(payload)
         } catch (error) {
-            store.dispatch({type:'cart/packaging', payload: null})
+            store.dispatch({ type: 'cart/packaging', payload: null })
         }
     }
 
 }
 
-export { getCartMiddleware, addProductToCartMiddleware, choosePackagingMiddleware}
+// CARGAR CUPÓN
+const loadCouponMiddleware: Middleware = (store) => (next) => async (action: any) => {
+    next(action)
+    const { type, payload } = action
+
+    if (type === 'cart/loadCoupon') {
+
+        store.dispatch({ type: 'cart/isLoading', payload: true })
+
+        try {
+            const newProducts = await loadCoupon(payload)
+
+            newProducts.forEach(prod => store.dispatch({ type: 'cart/addProduct', payload: prod }))
+            toast.success('¡Cupón obtenido correctamente!')
+            
+        } catch (error) {
+            console.error(error)
+        } finally {
+            store.dispatch({ type: 'cart/isLoading', payload: false })
+        }
+    }
+}
+
+export { getCartMiddleware, addProductToCartMiddleware, choosePackagingMiddleware, loadCouponMiddleware}

@@ -5,10 +5,12 @@ import { Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage 
 import { getCupons } from "../FIREBASE";
 import ButtonGoCart from "../CART/Element/ButtonGoCart";
 import { toast, Toaster } from "sonner";
+import useCoupons from "./customHook/useCoupons";
 
 export default function Coupons() {
 
     const [cupounsLocal, setCupounsLocal] = useState<Coupon<CouponFixed | CouponPercentage | CouponFixedDiscount | CouponBogo>[]>([])
+    const {loadCoupon} = useCoupons()
 
     const { isError, isLoading, refetch } = useQuery({
         queryKey: ['cupons'],
@@ -47,8 +49,9 @@ export default function Coupons() {
         <ul>
             {cupounsLocal.map((cupons, index) => (
                 <li
+                    onClick={()=>{loadCoupon(cupons.id)}}
                     ref={index === cupounsLocal.length - 1 ? observerFc : null}
-                    key={index} style={{ border: '1px solid red', margin: '100px' }}>
+                    key={index} style={{ border: '1px solid red', margin: '100px', cursor:'pointer' }}>
                     <img src={cupons.img} alt={cupons.name.toLocaleUpperCase()} loading="lazy"/>
                     <h2>{cupons.name}</h2>
                     <p>{cupons.description}</p>
@@ -58,6 +61,6 @@ export default function Coupons() {
         {isLoading && <span>Cargando Cupones...</span>}
         {isError && <span>Error al cargar</span>}
         {cupounsLocal.length < 1 && !isLoading && !isError && <span>No hay cupones disponibles...</span>}
-        <Toaster />
+        <Toaster position="bottom-center" />
     </main>)
 }
