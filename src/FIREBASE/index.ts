@@ -96,14 +96,14 @@ export async function getCart(): Promise<Cart> {
 export async function addProductToCart(productInCartLocal: ProductsInCart) {
     try {
 
-        const { priceFinal, productId, quantityProductLocal, type } = productInCartLocal
+        const { priceFinal, productId, quantityProductLocal, type, sizeSelectedLocal } = productInCartLocal
         const productInCart = CART.content.some(prod => prod.productId === productId)
 
         if (productInCart) {
             const indexProductInCart = CART.content.findIndex(prod => prod.productId === productId)
             CART.content[indexProductInCart].quantityProductLocal += quantityProductLocal
         } else {
-            CART.content = [...CART.content, { productId, priceFinal, quantityProductLocal, type }];
+            CART.content = [...CART.content, { productId, priceFinal, quantityProductLocal, type, sizeSelectedLocal}];
         }
 
         CART.priceTotal += parseFloat((priceFinal * quantityProductLocal).toFixed(2))
@@ -158,7 +158,7 @@ export async function loadCoupon(idCoupon: string): Promise<ProductsInCart[]> {
                         productId: prod.id,
                         quantityProductLocal: 1,
                         type: 'COUPONS'
-                    })
+                    }) 
                 })
 
                 break;
@@ -189,10 +189,26 @@ export async function getCartViewed(cartLocalViewedLength: number): Promise<Prod
             name: prod.name,
             price: prod.price,
             sizes: isCoupon.some(pr => pr.productId === prod.id) ? 'COUPONS' : undefined,
-            quantity: productReferenceInCart_DB[productReferenceInCart_DB.findIndex(pr => pr.productId === prod.id)].quantityProductLocal
+            quantity: productReferenceInCart_DB[productReferenceInCart_DB.findIndex(pr => pr.productId === prod.id)].quantityProductLocal,
+            size: productReferenceInCart_DB[productReferenceInCart_DB.findIndex(pr => pr.productId === prod.id)].sizeSelectedLocal
         }))
 
     } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+
+// VACIAR CARRITO
+export async function emptyCart() {
+    try {
+        if (CART.content.length < 1) return
+
+        CART.content.splice(0)
+        CART.priceTotal = 0
+        toast.success('Carrito vacío correctamente!')
+    } catch (error) {
+        toast.error('Error al vaciar carrito')
         console.error(error)
         throw error
     }

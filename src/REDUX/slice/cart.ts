@@ -30,7 +30,8 @@ export const cartSlice = createSlice({
 
             if (!state.data) throw new Error('Data es null')
 
-            const { priceFinal, productId, quantityProductLocal, type } = action.payload
+            const { priceFinal, productId, quantityProductLocal, type, sizeSelectedLocal} = action.payload
+            
             const { content } = state.data
             const productInCart = content.some(prod => prod.productId === productId)
 
@@ -44,7 +45,8 @@ export const cartSlice = createSlice({
                     priceFinal: priceFinal,
                     productId: productId,
                     quantityProductLocal: quantityProductLocal,
-                    type: type
+                    type: type,
+                    sizeSelectedLocal: sizeSelectedLocal
                 })
             }
 
@@ -75,6 +77,12 @@ export const cartSlice = createSlice({
 
             const { payload } = action
             state.data.packaging = payload
+        },
+        empty: (state) =>{
+            if(!state.data) throw new Error('Data es null')
+
+            state.data.content.splice(0)
+            state.data.priceTotal = 0
         }
     }
 })

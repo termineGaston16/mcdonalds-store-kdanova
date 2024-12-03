@@ -54,6 +54,7 @@ export default function Cart() {
                         <span>Cantidad: ({prod.quantity})</span>
                         <img src={prod.img} alt={prod.name.toLocaleUpperCase()} loading="lazy" />
                         <h3>{prod.name}</h3>
+                        <h5>{prod.size}</h5>
                     </li>
                 ))
                 :

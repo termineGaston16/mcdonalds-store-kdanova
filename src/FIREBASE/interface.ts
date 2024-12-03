@@ -24,7 +24,8 @@ export interface ProductsInCart {
     productId: Product['id'],
     quantityProductLocal: number,
     priceFinal: number,
-    type?: 'COUPONS'
+    type?: 'COUPONS',
+    sizeSelectedLocal?: string
 }
 
 export interface ProductsInCartViewed {
@@ -33,7 +34,8 @@ export interface ProductsInCartViewed {
     img: Product['img']
     price: Product['price'],
     sizes?: string,
-    quantity: number
+    quantity: number,
+    size?: string
 }
 
 export interface Coupon<T> {

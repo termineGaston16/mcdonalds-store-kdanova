@@ -25,7 +25,8 @@ export default function useCart() {
     const addProductToCart = (
         productId: string,
         quantityProductLocal: number,
-        priceFinal: number
+        priceFinal: number,
+        sizeSelectedLocal: string | undefined
     ) => {
         if (quantityProductLocal < 1) return
 
@@ -33,7 +34,8 @@ export default function useCart() {
             type: 'cart/addProductToCart', payload: {
                 productId: productId,
                 quantityProductLocal: quantityProductLocal,
-                priceFinal: priceFinal
+                priceFinal: priceFinal,
+                sizeSelectedLocal: sizeSelectedLocal
             }
         })
     }
@@ -44,7 +46,10 @@ export default function useCart() {
     }
 
     //VACIAR CARRITO
+    const emptyCart =()=>{
+        
+        dispatch({type: 'cart/emptyCart'})
+    }
     
-
-    return { addIndividualProductQuantity, subtractIndividualProductQuantity, addProductToCart, choosePackaging }
+    return { addIndividualProductQuantity, subtractIndividualProductQuantity, addProductToCart, choosePackaging, emptyCart }
 }

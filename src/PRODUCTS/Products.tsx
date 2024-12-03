@@ -23,6 +23,7 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
     const [productOpen, setProductOpen] = useState<Product | null>(null)
     const [quantityProductLocal, setQuantityProductLocal] = useState<number>(0)
     const [aditionalPriceLocal, setAditionalPriceLocal] = useState<number>(0)
+    const [sizeSelectedLocal, setSizeSelectedLocal] = useState<string | undefined>(undefined)
 
     const { isLoading, refetch } = useQuery({
         queryKey: ['category', category, query],
@@ -170,7 +171,10 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                                                         defaultChecked={index === 0}
                                                         id={`productOpenOption_${index + 1}`}
                                                         name="productOpenOption"
-                                                        onChange={() => setAditionalPriceLocal(options.additionalPrice)}
+                                                        onChange={() => {
+                                                            setAditionalPriceLocal(options.additionalPrice)
+                                                            setSizeSelectedLocal(options.size)
+                                                        }}
                                                     />
 
                                                     <label htmlFor={`productOpenOption_${index + 1}`}>
@@ -190,7 +194,8 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                                             addProductToCart(
                                                 productOpen.id,
                                                 quantityProductLocal,
-                                                (productOpen.price + aditionalPriceLocal)
+                                                parseFloat((productOpen.price + aditionalPriceLocal).toFixed(2)),
+                                                sizeSelectedLocal
                                             )
                                             setProductOpen(null)
                                             setQuantityProductLocal(0)
