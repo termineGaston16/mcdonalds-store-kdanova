@@ -6,6 +6,7 @@ import { Product } from "../FIREBASE/interface";
 import { useState } from "react";
 import { useAppSelector } from "../REDUX/hooks/useStore";
 import Packging from "../PACKAGING/Packaging";
+import useCart from "../CART/customHook/useCart";
 
 interface Props {
     setResultLocal: React.Dispatch<React.SetStateAction<Product[]>>
@@ -23,8 +24,8 @@ const NavBar: React.FC<Props> = ({ setResultLocal }) => {
         retryDelay: 2000
     })
 
-    const [packagingLocal, setPackagingLocal] = useState<"EAT HERE" | "CARRY" | null>("EAT HERE")
     const { data } = useAppSelector(store => store.cartOfRedux)
+    const { choosePackaging } = useCart()
 
     const location = useLocation()
     const emptyResults = (locationQuery: string) => {
@@ -34,7 +35,7 @@ const NavBar: React.FC<Props> = ({ setResultLocal }) => {
     return (<nav className="nav-bar">
         <ul className="nav-bar__list">
             <li
-                onClick={() => { setPackagingLocal(null) }}
+                onClick={() => { choosePackaging(null) }}
                 className="nav-bar__list__item">
                 <img className="nav-bar__list__item__img"
                     loading="lazy"
@@ -102,7 +103,7 @@ const NavBar: React.FC<Props> = ({ setResultLocal }) => {
             </Link>
         </ul>
 
-        {(!packagingLocal || !data?.packaging) && <Packging />}
+        {!data?.packaging && <Packging />}
     </nav>)
 }
 

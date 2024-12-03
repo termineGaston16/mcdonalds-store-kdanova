@@ -21,6 +21,7 @@ function AppContent() {
     const dispatch = useAppDispatch();
     const { isError } = useAppSelector(state => state.cartOfRedux)
 
+
     useEffect(() => { dispatch({ type: 'cart/getCart' }); }, []);
     useEffect(() => { if (isError) toast(<div>Error al obtener carrito</div>) }, [isError])
 
@@ -33,8 +34,8 @@ function AppContent() {
                 <Routes>
                     <Route path="*" element="Error 404" />
                     <Route path="/" element={<Products resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
-                    <Route path="/categoria/:category" element={<Products  resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
-                    <Route path="/buscar/:query" element={<Products  resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
+                    <Route path="/categoria/:category" element={<Products resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
+                    <Route path="/buscar/:query" element={<Products resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
                     <Route
                         path="/cupones"
                         element={

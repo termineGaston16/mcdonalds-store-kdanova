@@ -39,7 +39,7 @@ export default function useCart() {
     }
 
     // ELEGIR EL TIPO DE EMPÁQUETADO
-    const choosePackaging = (type: 'EAT HERE' | 'CARRY') => {
+    const choosePackaging = (type: 'EAT HERE' | 'CARRY' | null) => {
         dispatch({ type: 'cart/choosePackaging', payload: type })
     }
 
