@@ -43,5 +43,8 @@ export default function useCart() {
         dispatch({ type: 'cart/choosePackaging', payload: type })
     }
 
+    //VACIAR CARRITO
+    
+
     return { addIndividualProductQuantity, subtractIndividualProductQuantity, addProductToCart, choosePackaging }
 }
