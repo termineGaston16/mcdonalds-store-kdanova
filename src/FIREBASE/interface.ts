@@ -32,7 +32,8 @@ export interface ProductsInCartViewed {
     name: Product['name'],
     img: Product['img']
     price: Product['price'],
-    sizes?: string
+    sizes?: string,
+    quantity: number
 }
 
 export interface Coupon<T> {

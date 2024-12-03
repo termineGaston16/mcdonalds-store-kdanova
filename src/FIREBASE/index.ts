@@ -96,17 +96,17 @@ export async function getCart(): Promise<Cart> {
 export async function addProductToCart(productInCartLocal: ProductsInCart) {
     try {
 
-        const { priceFinal, productId, quantityProductLocal } = productInCartLocal
+        const { priceFinal, productId, quantityProductLocal, type } = productInCartLocal
         const productInCart = CART.content.some(prod => prod.productId === productId)
 
         if (productInCart) {
             const indexProductInCart = CART.content.findIndex(prod => prod.productId === productId)
             CART.content[indexProductInCart].quantityProductLocal += quantityProductLocal
         } else {
-            CART.content = [...CART.content, { productId, priceFinal, quantityProductLocal }];
+            CART.content = [...CART.content, { productId, priceFinal, quantityProductLocal, type }];
         }
 
-        CART.priceTotal += (priceFinal * quantityProductLocal)
+        CART.priceTotal += parseFloat((priceFinal * quantityProductLocal).toFixed(2))
         toast.success(`Product: [${productId}] subido correctamente al carrito en la base de datos`)
 
     } catch (error) {
@@ -179,15 +179,17 @@ export async function getCartViewed(cartLocalViewedLength: number): Promise<Prod
 
     try {
 
-        const productReferenceInCart_DB = CART.content.slice(cartLocalViewedLength, cartLocalViewedLength + 4).map(prod => prod.productId)
-        const originalProductsIn_DB = PRODUCTS.filter(prod => productReferenceInCart_DB.some(prodRef => prodRef === prod.id))
+        const productReferenceInCart_DB = CART.content.slice(cartLocalViewedLength, cartLocalViewedLength + 4)
+        const isCoupon = productReferenceInCart_DB.filter(prod => prod.type === 'COUPONS')
+        const originalProductsIn_DB = PRODUCTS.filter(prod => productReferenceInCart_DB.some(prodRef => prodRef.productId === prod.id))
 
         return originalProductsIn_DB.map(prod => ({
             id: prod.id,
             img: prod.img,
             name: prod.name,
             price: prod.price,
-            sizes: prod.options ? 'COUPONS' : undefined
+            sizes: isCoupon.some(pr => pr.productId === prod.id) ? 'COUPONS' : undefined,
+            quantity: productReferenceInCart_DB[productReferenceInCart_DB.findIndex(pr => pr.productId === prod.id)].quantityProductLocal
         }))
 
     } catch (error) {

@@ -50,11 +50,11 @@ export const cartSlice = createSlice({
 
             switch (type) {
                 case 'COUPONS':
-                    state.data.priceTotal += priceFinal
+                    state.data.priceTotal += parseFloat(priceFinal.toFixed(2))
                     break;
 
                 default:
-                    state.data.priceTotal += (priceFinal * quantityProductLocal)
+                    state.data.priceTotal += parseFloat((priceFinal * quantityProductLocal).toFixed(2))
                     break;
             }
         },

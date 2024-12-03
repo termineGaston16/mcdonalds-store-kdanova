@@ -9,6 +9,7 @@ import { Product } from "./FIREBASE/interface";
 import Products from "./PRODUCTS/Products";
 import { useAppDispatch, useAppSelector } from "./REDUX/hooks/useStore";
 import { toast, Toaster } from "sonner";
+import LoadingWhiteBackground from "./LOADINGS/LoadingWhitBackground";
 import { CART } from "./DATABASE";
 
 function AppContent() {
@@ -20,8 +21,12 @@ function AppContent() {
     const Cart = lazy(() => import('./CART/Cart'));
 
     const dispatch = useAppDispatch();
-    const { isError } = useAppSelector(state => state.cartOfRedux)
-    console.log(CART)
+    const { isError, data } = useAppSelector(state => state.cartOfRedux)
+    console.log(data)
+    console.log('...');
+    console.log(CART);
+    
+    
     
     useEffect(() => { dispatch({ type: 'cart/getCart' }); }, []);
     useEffect(() => { if (isError) toast(<div>Error al obtener carrito</div>) }, [isError])
@@ -40,7 +45,7 @@ function AppContent() {
                     <Route
                         path="/cupones"
                         element={
-                            <Suspense fallback="Cargando Componente: Coupons">
+                            <Suspense fallback={<LoadingWhiteBackground />}>
                                 <Coupons />
                             </Suspense>
                         }
@@ -48,7 +53,7 @@ function AppContent() {
                     <Route
                         path="/buscar"
                         element={
-                            <Suspense fallback="Cargando Elemento: Search">
+                            <Suspense fallback={<LoadingWhiteBackground />}>
                                 <Search />
                             </Suspense>
                         }
@@ -56,7 +61,7 @@ function AppContent() {
                     <Route
                         path="/carrito"
                         element={
-                            <Suspense fallback="Cargando Componente: Cart">
+                            <Suspense fallback={<LoadingWhiteBackground />}>
                                 <Cart />
                             </Suspense>
                         }

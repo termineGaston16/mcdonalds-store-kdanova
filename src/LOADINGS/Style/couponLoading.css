@@ -1,0 +1,61 @@
+.coupon-loading__background {
+    width: 100vw;
+    height: 100vh;
+
+    background-color: rgba(0, 0, 0, 0.83);
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.coupon-loading {
+    aspect-ratio: 1/1;
+
+    background-color: white;
+    width: 200px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1vw;
+
+    padding: 1vw;
+}
+
+.coupon-loading__title {
+    color: black;
+    font-size: clamp(14px, 1vw, 100px);
+
+}
+
+.coupon-loading__icon {
+    color: black;
+
+    width: 50px;
+    height: 50px;
+}
+
+.coupon-loading__loading-bar {
+    height: 5px;
+    background-color: black;
+    animation: barLoading 2s infinite ease-in;
+}
+
+@keyframes barLoading {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 100%;
+    }
+}

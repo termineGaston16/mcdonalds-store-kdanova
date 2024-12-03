@@ -15,7 +15,6 @@ export default function ButtonsInCart(){
             onClick={() => navigate(-1)}
             type="button">Volver</button>
         <button type="button">Vaciar</button>
-        <button type="button">Finalizar compra</button>
-        <span>Precio Total: ${data?.priceTotal}</span>
+        <span>Precio Total: ${data?.priceTotal.toFixed(2)}</span>
     </div>)
 }

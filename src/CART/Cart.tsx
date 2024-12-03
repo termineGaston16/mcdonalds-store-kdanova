@@ -4,6 +4,8 @@ import { useCallback, useRef, useState } from "react";
 import { ProductsInCartViewed } from "../FIREBASE/interface";
 import { getCartViewed } from "../FIREBASE";
 import { toast, Toaster } from "sonner";
+import LoadingIntoAComponent from "../LOADINGS/LoadingIntoAComponent";
+import './Style/cart.css'
 
 export default function Cart() {
 
@@ -35,20 +37,28 @@ export default function Cart() {
         if (node) observer.current.observe(node)
     }, [isLoading, refetch])
 
-    return (<main>
-        <h3>Tu Carrito</h3>
-        <p>Aquí puedes ver todos los productos almanceados antes de comprarlos.</p>
+    return (<main className="cart">
+        <h3 className="cart__title">Tu Carrito</h3>
+        <p className="cart__text">Aquí puedes ver todos los productos almanceados antes de comprarlos.</p>
         <ButtonsInCart />
 
-        <ul>
-            {cartLocalViewed.length > 0 && cartLocalViewed.map((prod, index) => (
-                <li key={index}
-                    ref={index === cartLocalViewed.length - 1 ? cartLocalViewedObserver : null}>
-                    <span>${prod.price} {prod.sizes}</span>
-                    <img src={prod.img} alt={prod.name.toLocaleUpperCase()} loading="lazy" />
-                    <h3>{prod.name}</h3>
-                </li>
-            ))}
+        <ul className="cart__list">
+            {cartLocalViewed.length > 0
+                ?
+                cartLocalViewed.map((prod, index) => (
+                    <li
+                        className={`cart__item ${prod.sizes && 'cupon'}`}
+                        key={index}
+                        ref={index === cartLocalViewed.length - 1 ? cartLocalViewedObserver : null}>
+                        <span>${prod.price} {prod.sizes}</span>
+                        <span>Cantidad: ({prod.quantity})</span>
+                        <img src={prod.img} alt={prod.name.toLocaleUpperCase()} loading="lazy" />
+                        <h3>{prod.name}</h3>
+                    </li>
+                ))
+                :
+                <span>No hay productos en tu carrito</span>}
+            {isLoading && <LoadingIntoAComponent />}
         </ul>
 
         <Toaster position="bottom-center" />
