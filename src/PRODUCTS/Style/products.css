@@ -1,4 +1,4 @@
-.products{
+.products {
     width: 100%;
     max-width: 1200px;
     min-height: 80vh;
@@ -12,14 +12,14 @@
     padding: 2vw 0px;
 }
 
-.products__title{
+.products__title {
     font-size: clamp(18px, 2vw, 100px);
     text-align: center;
     font-weight: 500;
     font-style: italic;
 }
 
-.products__list{
+.products__list {
     width: 100%;
     height: auto;
 
@@ -30,7 +30,7 @@
     justify-content: center;
 }
 
-.products__list__item{
+.products__list__item {
     aspect-ratio: 1/1;
     overflow: hidden;
     background-color: rgba(107, 250, 202, 0.291);
@@ -44,31 +44,34 @@
     cursor: pointer;
 
 }
-.products__list__item__price{
+
+.products__list__item__price {
     width: 100%;
     text-align: end;
 
     padding: 0px 1vw;
 }
 
-.products__list__item__img{
+.products__list__item__img {
     aspect-ratio: 1/1;
     width: 10vw;
 }
 
-.products__list__item__name{
+.products__list__item__name {
     width: 100%;
     text-align: center;
 }
 
-.products__list__item__price, .products__list__item__name{
+.products__list__item__price,
+.products__list__item__name {
     border: 1px solid red;
 
     text-overflow: ellipsis;
     max-width: 15vw;
 }
 
-.productOpen__content{
+.productOpen__content,
+.packaging__component {
     width: 100vw;
     height: 100vh;
 
@@ -83,7 +86,7 @@
     flex-direction: column;
 }
 
-.productOpen{
+.productOpen {
     background-color: rgba(245, 222, 179, 0.641);
 
     width: 50vw;
@@ -101,7 +104,8 @@
     padding: 1vw;
 }
 
-.productOpen__face-one, .productOpen__face-two{
+.productOpen__face-one,
+.productOpen__face-two {
     border: 1px solid yellow;
     width: 50%;
     aspect-ratio: 1/1;
@@ -116,32 +120,26 @@
     text-align: center;
 }
 
-.productOpen__face-one__name{
+.productOpen__face-one__name {
     font-size: clamp(14px, 1.5vw, 100px);
 }
 
-.productOpen__face-one__img{
+.productOpen__face-one__img {
     aspect-ratio: 1/1;
     width: 20vw;
 }
 
-.productOpen__close{
+.productOpen__close {
     width: 100%;
     background: none;
     border: none;
 
     text-align: end;
     padding-right: 2vw;
-    
+
     font-size: clamp(14px, 1vw, 100px);
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-weight: 900;
     font-style: italic;
     cursor: pointer;
 }
-
-
-
-
-
-

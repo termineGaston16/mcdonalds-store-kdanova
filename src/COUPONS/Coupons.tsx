@@ -49,7 +49,7 @@ export default function Coupons() {
                 <li
                     ref={index === cupounsLocal.length - 1 ? observerFc : null}
                     key={index} style={{ border: '1px solid red', margin: '100px' }}>
-                    <img src={cupons.img} alt={cupons.name.toLocaleUpperCase()} />
+                    <img src={cupons.img} alt={cupons.name.toLocaleUpperCase()} loading="lazy"/>
                     <h2>{cupons.name}</h2>
                     <p>{cupons.description}</p>
                 </li>

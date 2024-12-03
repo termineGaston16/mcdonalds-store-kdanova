@@ -12,13 +12,13 @@ import useCart from "../CART/customHook/useCart";
 
 interface Props {
     resultLocal: Product[]
-    setResultLocal: React.Dispatch<React.SetStateAction<Product[]>>
+    setResultLocal: React.Dispatch<React.SetStateAction<Product[]>>,
 }
 
 const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
 
     const { category, query } = useParams();
-    const { addIndividualProductQuantity, subtractIndividualProductQuantity, addProductToCart } = useCart()
+    const { addIndividualProductQuantity, subtractIndividualProductQuantity, addProductToCart} = useCart()
 
     const [productOpen, setProductOpen] = useState<Product | null>(null)
     const [quantityProductLocal, setQuantityProductLocal] = useState<number>(0)
@@ -114,6 +114,7 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
                         <span className="productOpen__face-one__name">{productOpen.name}</span>
                         <img
                             className="productOpen__face-one__img"
+                            loading="lazy"
                             src={productOpen.img} alt={productOpen.name.toLocaleUpperCase()} />
                     </section>
                     <section className="productOpen__face-two">

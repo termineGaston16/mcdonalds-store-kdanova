@@ -1,5 +1,5 @@
 import { Middleware } from "@reduxjs/toolkit";
-import { addProductToCart, getCart } from "../../FIREBASE";
+import { addProductToCart, choosePackaging, getCart } from "../../FIREBASE";
 
 // OBTENER DATOS DEL CARRITO
 const getCartMiddleware: Middleware = (store) => (next) => async (action: any) => {
@@ -24,13 +24,13 @@ const getCartMiddleware: Middleware = (store) => (next) => async (action: any) =
 
 // AGREGAR PRODUCTO AL CARRITO
 const addProductToCartMiddleware: Middleware = (store) => (next) => async (action: any) => {
-    next(action)
 
+    next(action)
     const { type, payload } = action
 
     if (type === 'cart/addProductToCart') {
         store.dispatch({ type: 'cart/addProduct', payload: payload })
-        
+
         try {
             await addProductToCart(payload)
         } catch (error) {
@@ -39,4 +39,21 @@ const addProductToCartMiddleware: Middleware = (store) => (next) => async (actio
     }
 }
 
-export { getCartMiddleware, addProductToCartMiddleware }
+// ELEGIR MÉTODO DE EMPAQUETADO
+const choosePackagingMiddleware: Middleware = (store) => (next) => async (action: any) => {
+
+    next(action)
+    const { type, payload } = action
+
+    if(type === 'cart/choosePackaging'){
+        store.dispatch({type:'cart/packaging', payload: payload})
+        try {
+            await choosePackaging(payload)
+        } catch (error) {
+            store.dispatch({type:'cart/packaging', payload: null})
+        }
+    }
+
+}
+
+export { getCartMiddleware, addProductToCartMiddleware, choosePackagingMiddleware}

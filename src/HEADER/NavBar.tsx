@@ -3,6 +3,9 @@ import { Link, useLocation } from "react-router-dom";
 import { getCategories } from "../FIREBASE";
 import './Style/navbar.css'
 import { Product } from "../FIREBASE/interface";
+import { useState } from "react";
+import { useAppSelector } from "../REDUX/hooks/useStore";
+import Packging from "../PACKAGING/Packaging";
 
 interface Props {
     setResultLocal: React.Dispatch<React.SetStateAction<Product[]>>
@@ -20,15 +23,21 @@ const NavBar: React.FC<Props> = ({ setResultLocal }) => {
         retryDelay: 2000
     })
 
+    const [packagingLocal, setPackagingLocal] = useState<"EAT HERE" | "CARRY" | null>("EAT HERE")
+    const { data } = useAppSelector(store => store.cartOfRedux)
+
     const location = useLocation()
-    const emptyResults =(locationQuery: string)=>{
-        if(locationQuery !== decodeURIComponent(location.pathname)) setResultLocal([])
+    const emptyResults = (locationQuery: string) => {
+        if (locationQuery !== decodeURIComponent(location.pathname)) setResultLocal([])
     }
-    
+
     return (<nav className="nav-bar">
         <ul className="nav-bar__list">
-            <li className="nav-bar__list__item">
+            <li
+                onClick={() => { setPackagingLocal(null) }}
+                className="nav-bar__list__item">
                 <img className="nav-bar__list__item__img"
+                    loading="lazy"
                     src="" alt="Logo para la opción: Elegir Empaquetado" />
                 <span>Elegir Empaquetado</span>
             </li>
@@ -37,6 +46,7 @@ const NavBar: React.FC<Props> = ({ setResultLocal }) => {
                 className="nav-bar__list__item__link" to={'/'}>
                 <li className="nav-bar__list__item">
                     <img
+                        loading="lazy"
                         className="nav-bar__list__item__img"
                         src="" alt="Logo para la opción: Inicio" />
                     <span>Inicio</span>
@@ -54,6 +64,7 @@ const NavBar: React.FC<Props> = ({ setResultLocal }) => {
                 >
                     <li className="nav-bar__list__item">
                         <img
+                            loading="lazy"
                             className="nav-bar__list__item__img"
                             src={value}
                             alt={`Logo para la categoría: ${key}`}
@@ -71,6 +82,7 @@ const NavBar: React.FC<Props> = ({ setResultLocal }) => {
                 to={'/cupones'}>
                 <li className="nav-bar__list__item">
                     <img
+                        loading="lazy"
                         className="nav-bar__list__item__img"
                         src="" alt="Logo para la opción: Canjear Cupones" />
                     <span>Canjear Cupones</span>
@@ -82,12 +94,15 @@ const NavBar: React.FC<Props> = ({ setResultLocal }) => {
                 to={'/buscar'}>
                 <li className="nav-bar__list__item">
                     <img
+                        loading="lazy"
                         className="nav-bar__list__item__img"
                         src="" alt="Logo para la opción: Buscar nuestros Productos" />
                     <span>Buscar nuestros Productos</span>
                 </li>
             </Link>
         </ul>
+
+        {(!packagingLocal || !data?.packaging) && <Packging />}
     </nav>)
 }
 

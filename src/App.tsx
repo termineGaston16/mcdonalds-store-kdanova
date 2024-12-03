@@ -29,11 +29,12 @@ function AppContent() {
             <BrowserRouter>
                 <Header />
                 <NavBar setResultLocal={setResultLocal} />
+
                 <Routes>
                     <Route path="*" element="Error 404" />
                     <Route path="/" element={<Products resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
-                    <Route path="/categoria/:category" element={<Products resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
-                    <Route path="/buscar/:query" element={<Products resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
+                    <Route path="/categoria/:category" element={<Products  resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
+                    <Route path="/buscar/:query" element={<Products  resultLocal={resultLocal} setResultLocal={setResultLocal} />} />
                     <Route
                         path="/cupones"
                         element={

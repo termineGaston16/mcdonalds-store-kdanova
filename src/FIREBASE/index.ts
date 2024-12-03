@@ -118,3 +118,14 @@ export async function addProductToCart(productInCartLocal: ProductsInCart) {
         throw error
     }
 }
+
+// CAMBIAR EL MÉTODO DE EMPAQUETADO
+export async function choosePackaging(type: "EAT HERE" | "CARRY" | null){
+    try {
+        CART.packaging = type
+    } catch (error) {
+        console.error(error)
+        toast.error('Error al cambiar método de empaquetado')
+        throw error
+    }
+}

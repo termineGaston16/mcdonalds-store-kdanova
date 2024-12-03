@@ -59,6 +59,13 @@ export const cartSlice = createSlice({
             const indexProductInCart = content.findIndex(prod => prod.productId === productId)
             if (indexProductInCart < 0) throw new Error('indexProductInCart no encontrado')
             content.splice(indexProductInCart, 1)
+        },
+        packaging: (state, action: PayloadAction<"EAT HERE" | "CARRY" | null>) => {
+
+            if (!state.data) throw new Error('Data es null')
+
+            const { payload } = action
+            state.data.packaging = payload  
         }
     }
 })

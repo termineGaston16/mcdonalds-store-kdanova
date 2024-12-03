@@ -22,19 +22,26 @@ export default function useCart() {
     }
 
     //AÑADIR PRODUCTO AL CARRITO
-    const addProductToCart =(
+    const addProductToCart = (
         productId: string,
         quantityProductLocal: number,
         priceFinal: number
-    )=>{
-        if(quantityProductLocal < 1) return
+    ) => {
+        if (quantityProductLocal < 1) return
 
-        dispatch({type:'cart/addProductToCart', payload: {
-            productId: productId,
-            quantityProductLocal: quantityProductLocal,
-            priceFinal: priceFinal
-        }})
+        dispatch({
+            type: 'cart/addProductToCart', payload: {
+                productId: productId,
+                quantityProductLocal: quantityProductLocal,
+                priceFinal: priceFinal
+            }
+        })
     }
 
-    return { addIndividualProductQuantity, subtractIndividualProductQuantity, addProductToCart }
+    // ELEGIR EL TIPO DE EMPÁQUETADO
+    const choosePackaging = (type: 'EAT HERE' | 'CARRY') => {
+        dispatch({ type: 'cart/choosePackaging', payload: type })
+    }
+
+    return { addIndividualProductQuantity, subtractIndividualProductQuantity, addProductToCart, choosePackaging }
 }
