@@ -48,10 +48,14 @@ export const cartSlice = createSlice({
                 })
             }
 
-            if (type === 'COUPONS') {
-                state.data.priceTotal += priceFinal
-            } else {
-                state.data.priceTotal += (priceFinal * quantityProductLocal)
+            switch (type) {
+                case 'COUPONS':
+                    state.data.priceTotal += priceFinal
+                    break;
+
+                default:
+                    state.data.priceTotal += (priceFinal * quantityProductLocal)
+                    break;
             }
         },
         addProduct__REMOVE: (state, action: PayloadAction<ProductsInCart>) => {

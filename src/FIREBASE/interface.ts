@@ -27,6 +27,14 @@ export interface ProductsInCart {
     type?: 'COUPONS'
 }
 
+export interface ProductsInCartViewed {
+    id: Product['id'],
+    name: Product['name'],
+    img: Product['img']
+    price: Product['price'],
+    sizes?: string
+}
+
 export interface Coupon<T> {
     id: string,
     img: string,

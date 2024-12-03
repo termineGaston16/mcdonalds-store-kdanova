@@ -1,7 +1,6 @@
 import { toast } from "sonner";
 import { CART, COUPONS, PRODUCTS } from "../DATABASE";
-import { Cart, Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage, Product, ProductsInCart } from "./interface";
-
+import { Cart, Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage, Product, ProductsInCart, ProductsInCartViewed } from "./interface";
 
 
 // POST GET Y RES.OK
@@ -171,6 +170,28 @@ export async function loadCoupon(idCoupon: string): Promise<ProductsInCart[]> {
         return productsAReturns
 
     } catch (error) {
+        throw error
+    }
+}
+
+//CARGAR PRODUCTOS PARA EL CARRITO VISUALIZADO
+export async function getCartViewed(cartLocalViewedLength: number): Promise<ProductsInCartViewed[]> {
+
+    try {
+
+        const productReferenceInCart_DB = CART.content.slice(cartLocalViewedLength, cartLocalViewedLength + 4).map(prod => prod.productId)
+        const originalProductsIn_DB = PRODUCTS.filter(prod => productReferenceInCart_DB.some(prodRef => prodRef === prod.id))
+
+        return originalProductsIn_DB.map(prod => ({
+            id: prod.id,
+            img: prod.img,
+            name: prod.name,
+            price: prod.price,
+            sizes: prod.options ? 'COUPONS' : undefined
+        }))
+
+    } catch (error) {
+        console.error(error)
         throw error
     }
 }

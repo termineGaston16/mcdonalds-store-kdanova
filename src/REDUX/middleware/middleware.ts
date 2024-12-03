@@ -70,8 +70,9 @@ const loadCouponMiddleware: Middleware = (store) => (next) => async (action: any
             const newProducts = await loadCoupon(payload)
 
             newProducts.forEach(prod => store.dispatch({ type: 'cart/addProduct', payload: prod }))
+            newProducts.forEach(async prod =>  await addProductToCart(prod))
             toast.success('¡Cupón obtenido correctamente!')
-            
+
         } catch (error) {
             console.error(error)
         } finally {
@@ -80,4 +81,4 @@ const loadCouponMiddleware: Middleware = (store) => (next) => async (action: any
     }
 }
 
-export { getCartMiddleware, addProductToCartMiddleware, choosePackagingMiddleware, loadCouponMiddleware}
+export { getCartMiddleware, addProductToCartMiddleware, choosePackagingMiddleware, loadCouponMiddleware }

@@ -303,53 +303,6 @@ export const COUPONS: Coupon<CouponFixed | CouponPercentage | CouponFixedDiscoun
             finalPrice: 6.99
         }
     } as Coupon<CouponFixed>,
-    {
-        id: "d",
-        img: '',
-        name: "Descuento 20% en Postres",
-        description: "Obtén un 20% de descuento en cualquier postre.",
-        products: [],
-        type: {
-            type: 'percentage',
-            categoryAllowed: 'Postres',
-            discountPercent: 20
-        }
-    } as Coupon<CouponPercentage>,
-    {
-        id: "e",
-        img: '',
-        name: "50% en McFlurry Oreo",
-        description: "Disfruta un McFlurry Oreo con un 50% de descuento.",
-        products: ["7"],
-        type: {
-            type: 'percentage',
-            categoryAllowed: 'Postres',
-            discountPercent: 50
-        }
-    } as Coupon<CouponPercentage>,
-    {
-        id: "f",
-        img: '',
-        name: "Descuento $1 en Bebidas",
-        description: "Ahorra $1 en cualquier bebida",
-        products: [],
-        type: {
-            type: 'fixed-discount',
-            categoryAllowed: 'Bebidas',
-            discountAmount: 1
-        }
-    } as Coupon<CouponFixedDiscount>,
-    {
-        id: "g",
-        img: '',
-        name: "2x1 en McChicken",
-        description: "Compra un McChicken y obtén otro gratis.",
-        products: ["2"],
-        type: {
-            type: 'bogo'
-        }
-    } as Coupon<CouponBogo>,
-
 ];
 
 

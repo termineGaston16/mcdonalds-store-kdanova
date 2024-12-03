@@ -1,20 +1,21 @@
 import { useNavigate } from "react-router-dom"
+import { useAppSelector } from "../../REDUX/hooks/useStore"
 
-interface Props{
+interface Props {
     priceTotal: number
 }
 
-const ButtonsInCart:React.FC<Props> =({priceTotal})=>{
+export default function ButtonsInCart(){
+
+    const { data } = useAppSelector(state => state.cartOfRedux)
     const navigate = useNavigate()
 
-    return(<div>
-        <button 
-        onClick={()=> navigate(-1)}
-        type="button">Volver</button>
+    return (<div>
+        <button
+            onClick={() => navigate(-1)}
+            type="button">Volver</button>
         <button type="button">Vaciar</button>
         <button type="button">Finalizar compra</button>
-        <span>Precio Total: ${priceTotal}</span>
+        <span>Precio Total: ${data?.priceTotal}</span>
     </div>)
 }
-
-export default ButtonsInCart
