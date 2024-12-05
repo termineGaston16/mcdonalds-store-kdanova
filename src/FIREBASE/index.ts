@@ -22,7 +22,6 @@ const app = initializeApp(firebaseConfig);
 
 // POST GET Y RES.OK
 
-
 // OBTENER LAS CATEGORIAS PARA EL MENÚ
 export async function getCategories(): Promise<Map<Product['category'], Product['img']>> {
 
