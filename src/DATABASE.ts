@@ -1,4 +1,4 @@
-import { Cart, Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage, Product } from "./FIREBASE/interface";
+/* import { Cart, Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage, Product } from "./FIREBASE/interface";
 
 export const PRODUCTS: Product[] = [
     {
@@ -303,7 +303,7 @@ export const COUPONS: Coupon<CouponFixed | CouponPercentage | CouponFixedDiscoun
             finalPrice: 6.99
         }
     } as Coupon<CouponFixed>,
-];
+]; */
 
 
 

@@ -10,7 +10,6 @@ import Products from "./PRODUCTS/Products";
 import { useAppDispatch, useAppSelector } from "./REDUX/hooks/useStore";
 import { toast, Toaster } from "sonner";
 import LoadingWhiteBackground from "./LOADINGS/LoadingWhitBackground";
-import { CART } from "./DATABASE";
 
 function AppContent() {
     const [resultLocal, setResultLocal] = useState<Product[]>([]);
@@ -21,12 +20,7 @@ function AppContent() {
     const Cart = lazy(() => import('./CART/Cart'));
 
     const dispatch = useAppDispatch();
-    const { isError, data } = useAppSelector(state => state.cartOfRedux)
-    console.log(data)
-    console.log('...');
-    console.log(CART);
-    
-    
+    const { isError } = useAppSelector(state => state.cartOfRedux)
     
     useEffect(() => { dispatch({ type: 'cart/getCart' }); }, []);
     useEffect(() => { if (isError) toast(<div>Error al obtener carrito</div>) }, [isError])

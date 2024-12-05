@@ -2,6 +2,23 @@ import { toast } from "sonner";
 import { CART, COUPONS, PRODUCTS } from "../DATABASE";
 import { Cart, Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage, Product, ProductsInCart, ProductsInCartViewed } from "./interface";
 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBhnRZmvVnBQhhzTaEV2mRGFkQBKi5VCt4",
+  authDomain: "mcdonalds-store-31f28.firebaseapp.com",
+  projectId: "mcdonalds-store-31f28",
+  storageBucket: "mcdonalds-store-31f28.firebasestorage.app",
+  messagingSenderId: "424830977170",
+  appId: "1:424830977170:web:b12eeef13629c3219fd24b"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
 // POST GET Y RES.OK
 
