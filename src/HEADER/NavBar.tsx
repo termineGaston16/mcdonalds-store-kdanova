@@ -7,6 +7,8 @@ import { useState } from "react";
 import { useAppSelector } from "../REDUX/hooks/useStore";
 import Packging from "../PACKAGING/Packaging";
 import useCart from "../CART/customHook/useCart";
+import LoadingWhiteBackground from "../LOADINGS/LoadingWhitBackground";
+import LoadingIntoAComponent from "../LOADINGS/LoadingIntoAComponent";
 
 interface Props {
     setResultLocal: React.Dispatch<React.SetStateAction<Product[]>>
@@ -54,7 +56,7 @@ const NavBar: React.FC<Props> = ({ setResultLocal }) => {
                 </li>
             </Link>
 
-            {isLoading && <span>Cargando Categorías...</span>}
+            {isLoading && <LoadingIntoAComponent />}
             {isError && <span>Ocurrió un error</span>}
             {categories.size > 0 && Array.from(categories).map(([key, value], index) => (
                 <Link
@@ -103,7 +105,7 @@ const NavBar: React.FC<Props> = ({ setResultLocal }) => {
             </Link>
         </ul>
 
-        {!data?.packaging && <Packging />}
+        {!data && <LoadingWhiteBackground /> || !data?.packaging && <Packging />}
     </nav>)
 }
 

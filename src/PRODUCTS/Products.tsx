@@ -7,8 +7,8 @@ import { Product } from "../FIREBASE/interface";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import ButtonGoCart from "../CART/Element/ButtonGoCart";
 import { toast, Toaster } from "sonner";
-import LoadingWhiteBackground from "../LOADINGS/LoadingWhitBackground";
 import useCart from "../CART/customHook/useCart";
+import LoadingWhiteBackground from "../LOADINGS/LoadingWhitBackground";
 
 interface Props {
     resultLocal: Product[]
@@ -46,7 +46,6 @@ const Products: React.FC<Props> = ({ resultLocal, setResultLocal }) => {
             toast.error('Ocurrió un error con: getProductsByQuery || getProductsByCategory')
         },
         cacheTime: 0,
-        initialData: [],
         refetchInterval: false,
         retry: 2,
         retryDelay: 2000,

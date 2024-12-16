@@ -68,6 +68,8 @@ const loadCouponMiddleware: Middleware = (store) => (next) => async (action: any
 
         try {
             const newProducts = await loadCoupon(payload)
+            console.log(newProducts);
+            
             newProducts.forEach(prod => store.dispatch({ type: 'cart/addProductToCart', payload: prod }))
             toast.success('¡Cupón obtenido correctamente!')
 

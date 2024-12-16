@@ -24,8 +24,8 @@ export interface ProductsInCart {
     productId: Product['id'],
     quantityProductLocal: number,
     priceFinal: number,
-    type?: 'COUPONS',
-    sizeSelectedLocal?: string
+    type?: 'COUPONS' | null,
+    sizeSelectedLocal?: string | null
 }
 
 export interface ProductsInCartViewed {

@@ -1,24 +1,25 @@
 import { toast } from "sonner";
-import { CART, COUPONS, PRODUCTS } from "../DATABASE";
 import { Cart, Coupon, CouponBogo, CouponFixed, CouponFixedDiscount, CouponPercentage, Product, ProductsInCart, ProductsInCartViewed } from "./interface";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { collection, doc, getDoc, getDocs, getFirestore, updateDoc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBhnRZmvVnBQhhzTaEV2mRGFkQBKi5VCt4",
-  authDomain: "mcdonalds-store-31f28.firebaseapp.com",
-  projectId: "mcdonalds-store-31f28",
-  storageBucket: "mcdonalds-store-31f28.firebasestorage.app",
-  messagingSenderId: "424830977170",
-  appId: "1:424830977170:web:b12eeef13629c3219fd24b"
+    apiKey: "AIzaSyBhnRZmvVnBQhhzTaEV2mRGFkQBKi5VCt4",
+    authDomain: "mcdonalds-store-31f28.firebaseapp.com",
+    projectId: "mcdonalds-store-31f28",
+    storageBucket: "mcdonalds-store-31f28.firebasestorage.app",
+    messagingSenderId: "424830977170",
+    appId: "1:424830977170:web:b12eeef13629c3219fd24b"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app)
 
 // POST GET Y RES.OK
 
@@ -26,25 +27,40 @@ const app = initializeApp(firebaseConfig);
 export async function getCategories(): Promise<Map<Product['category'], Product['img']>> {
 
     try {
-        const filterMap = new Map<Product['category'], Product['img']>()
-        PRODUCTS.forEach(proyecto => {
-            if (!filterMap.has(proyecto.category.toLocaleLowerCase())) filterMap.set(
-                proyecto.category.toLocaleLowerCase(),
-                proyecto.img
-            )
-        })
-        return filterMap
+        const response = await getDocs(collection(db, 'PRODUCTS'));
+        const filterMap = new Map<Product['category'], Product['img']>();
 
+        response.forEach((doc) => {
+            const proyect = doc.data() as Product;
+            if (!filterMap.has(proyect.category.toLocaleLowerCase())) {
+                filterMap.set(
+                    proyect.category.toLocaleLowerCase(),
+                    proyect.img
+                );
+            }
+        });
+
+        return filterMap;
     } catch (error) {
-        console.error(error)
-        throw error
+        console.error(error);
+        throw error;
     }
+
 }
 
 // OBTENER RESULTADOS SEGÚN LA CATEGORIA
 export async function getProductsByCategory(category: string | undefined, indexResults: number): Promise<Product[]> {
 
     try {
+
+        const response = await getDocs(collection(db, 'PRODUCTS'))
+        const PRODUCTS: Product[] = []
+
+        response.forEach((doc) => {
+            const data = doc.data() as Product
+            PRODUCTS.push(data)
+        })
+
         if (!category) return PRODUCTS.map(product => ({
             category: product.category,
             description: product.description,
@@ -67,6 +83,14 @@ export async function getProductsByCategory(category: string | undefined, indexR
 // OBTENER LOS CUPONES DISPONIBLES
 export async function getCupons(couponsLength: number): Promise<Coupon<CouponFixed | CouponPercentage | CouponFixedDiscount | CouponBogo>[]> {
     try {
+        const response = await getDocs(collection(db, 'COUPONS'))
+        const COUPONS: Coupon<CouponFixed>[] = []
+
+        response.forEach(doc => {
+            const cupon = doc.data() as Coupon<CouponFixed>
+            COUPONS.push(cupon)
+        })
+
         return COUPONS.map(cupon => ({
             description: cupon.description,
             id: cupon.id,
@@ -85,6 +109,14 @@ export async function getCupons(couponsLength: number): Promise<Coupon<CouponFix
 // OBTENER RESULTADOS SEGÚN EL QUERY
 export async function getProductsByQuery(query: string, indexResults: number): Promise<Product[]> {
     try {
+        const response = await getDocs(collection(db, 'PRODUCTS'))
+        const PRODUCTS: Product[] = []
+
+        response.forEach((doc) => {
+            const data = doc.data() as Product
+            PRODUCTS.push(data)
+        })
+
         return PRODUCTS.filter(products => products.name.toLocaleLowerCase().includes(query)).slice(indexResults, indexResults + 4)
     } catch (error) {
         console.error(error)
@@ -96,11 +128,29 @@ export async function getProductsByQuery(query: string, indexResults: number): P
 export async function getCart(): Promise<Cart> {
 
     try {
-        return {
-            content: CART.content,
-            packaging: CART.packaging,
-            priceTotal: CART.priceTotal
-        } as Cart
+
+        const docRef = doc(db, 'CART', 'NGnbFAO9mHkM2Hhy8drs')
+        const docSnap = await getDoc(docRef)
+
+        if (docSnap.exists()) {
+            
+            return {
+                content: (docSnap.data() as Cart).content,
+                packaging: (docSnap.data() as Cart).packaging,
+                priceTotal: (docSnap.data() as Cart).priceTotal
+            } as Cart
+
+        } else {
+
+            new Error('Error al obtener datos del carrito')
+
+            return {
+                content: [],
+                packaging: "EAT HERE",
+                priceTotal: 0
+            }
+
+        }
 
     } catch (error) {
         console.error
@@ -112,17 +162,41 @@ export async function getCart(): Promise<Cart> {
 export async function addProductToCart(productInCartLocal: ProductsInCart) {
     try {
 
+        const docRef = doc(db, 'CART', 'NGnbFAO9mHkM2Hhy8drs')
+        const docSnap = await getDoc(docRef)
+        console.log(2);
+        
+
+        const CART: Cart = {
+            content: (docSnap.data() as Cart).content,
+            packaging: (docSnap.data() as Cart).packaging,
+            priceTotal: (docSnap.data() as Cart).priceTotal
+        }
+
         const { priceFinal, productId, quantityProductLocal, type, sizeSelectedLocal } = productInCartLocal
+        const newProduct = {
+            productId,
+            priceFinal,
+            quantityProductLocal,
+            type: type ?? null, // Reemplaza undefined por null (opcional).
+            sizeSelectedLocal: sizeSelectedLocal ?? null, // Reemplaza undefined por null (opcional).
+        };
         const productInCart = CART.content.some(prod => prod.productId === productId)
 
         if (productInCart) {
             const indexProductInCart = CART.content.findIndex(prod => prod.productId === productId)
             CART.content[indexProductInCart].quantityProductLocal += quantityProductLocal
         } else {
-            CART.content = [...CART.content, { productId, priceFinal, quantityProductLocal, type, sizeSelectedLocal}];
+            CART.content = [...CART.content, newProduct];
         }
 
         CART.priceTotal += parseFloat((priceFinal * quantityProductLocal).toFixed(2))
+
+        await updateDoc(docRef, {
+            content: CART.content,
+            priceTotal: CART.priceTotal
+        });
+
         toast.success(`Product: [${productId}] subido correctamente al carrito en la base de datos`)
 
     } catch (error) {
@@ -137,7 +211,12 @@ export async function addProductToCart(productInCartLocal: ProductsInCart) {
 // CAMBIAR EL MÉTODO DE EMPAQUETADO
 export async function choosePackaging(type: "EAT HERE" | "CARRY" | null) {
     try {
-        CART.packaging = type
+        const docRef = doc(db, 'CART', 'NGnbFAO9mHkM2Hhy8drs')
+
+        await updateDoc(docRef, {
+            packaging: type,
+        });
+
     } catch (error) {
         console.error(error)
         toast.error('Error al cambiar método de empaquetado')
@@ -148,7 +227,25 @@ export async function choosePackaging(type: "EAT HERE" | "CARRY" | null) {
 // CARGAR CUPÓN
 export async function loadCoupon(idCoupon: string): Promise<ProductsInCart[]> {
     try {
-        const { content } = CART
+
+        const docRef = doc(db, 'CART', 'NGnbFAO9mHkM2Hhy8drs')
+        const docSnap = await getDoc(docRef)
+
+        const response = await getDocs(collection(db, 'COUPONS'))
+        const COUPONS: Coupon<CouponFixed>[] = []
+        response.forEach(doc => {
+            const coupon = doc.data() as Coupon<CouponFixed>
+            COUPONS.push(coupon)
+        })
+
+        const response2 = await getDocs(collection(db, 'PRODUCTS'))
+        const PRODUCTS: Product[] = []
+        response2.forEach(doc => {
+            const prod = doc.data() as Product
+            PRODUCTS.push(prod)
+        })
+
+        const { content } = (docSnap.data() as Cart)
         const searchCoupon = content.some(prod => prod.type === 'COUPONS')
         const couponFound = COUPONS.find(coup => coup.id === idCoupon)
 
@@ -174,7 +271,7 @@ export async function loadCoupon(idCoupon: string): Promise<ProductsInCart[]> {
                         productId: prod.id,
                         quantityProductLocal: 1,
                         type: 'COUPONS'
-                    }) 
+                    })
                 })
 
                 break;
@@ -183,6 +280,7 @@ export async function loadCoupon(idCoupon: string): Promise<ProductsInCart[]> {
                 break;
         }
 
+        console.log(productsAReturns);
         return productsAReturns
 
     } catch (error) {
@@ -194,6 +292,22 @@ export async function loadCoupon(idCoupon: string): Promise<ProductsInCart[]> {
 export async function getCartViewed(cartLocalViewedLength: number): Promise<ProductsInCartViewed[]> {
 
     try {
+
+        const response2 = await getDocs(collection(db, 'PRODUCTS'))
+        const PRODUCTS: Product[] = []
+        response2.forEach(doc => {
+            const prod = doc.data() as Product
+            PRODUCTS.push(prod)
+        })
+
+        const docRef = doc(db, 'CART', 'NGnbFAO9mHkM2Hhy8drs')
+        const docSnap = await getDoc(docRef)
+        const CART: Cart = {
+            content: (docSnap.data() as Cart).content,
+            packaging: (docSnap.data() as Cart).packaging,
+            priceTotal: (docSnap.data() as Cart).priceTotal
+        }
+
 
         const productReferenceInCart_DB = CART.content.slice(cartLocalViewedLength, cartLocalViewedLength + 4)
         const isCoupon = productReferenceInCart_DB.filter(prod => prod.type === 'COUPONS')
@@ -218,10 +332,25 @@ export async function getCartViewed(cartLocalViewedLength: number): Promise<Prod
 // VACIAR CARRITO
 export async function emptyCart() {
     try {
+
+        const docRef = doc(db, 'CART', 'NGnbFAO9mHkM2Hhy8drs')
+        const docSnap = await getDoc(docRef)
+        const CART: Cart = {
+            content: (docSnap.data() as Cart).content,
+            packaging: (docSnap.data() as Cart).packaging,
+            priceTotal: (docSnap.data() as Cart).priceTotal
+        }
+
         if (CART.content.length < 1) return
 
         CART.content.splice(0)
         CART.priceTotal = 0
+
+        await updateDoc(docRef, {
+            content: [],
+            priceTotal: 0
+        });
+
         toast.success('Carrito vacío correctamente!')
     } catch (error) {
         toast.error('Error al vaciar carrito')

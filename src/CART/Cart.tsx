@@ -10,6 +10,8 @@ import './Style/cart.css'
 export default function Cart() {
 
     const [cartLocalViewed, setCartLocalViewed] = useState<ProductsInCartViewed[]>([])
+    console.log(cartLocalViewed);
+    
 
     const { isLoading, refetch } = useQuery({
         queryKey: ['cartLocalViewed'],
@@ -58,7 +60,8 @@ export default function Cart() {
                     </li>
                 ))
                 :
-                <span>No hay productos en tu carrito</span>}
+                !isLoading && <span>No hay productos en tu carrito</span>}
+
             {isLoading && <LoadingIntoAComponent />}
         </ul>
 

@@ -13,14 +13,13 @@ import LoadingIntoAComponent from "../LOADINGS/LoadingIntoAComponent";
 export default function Coupons() {
 
     const [cupounsLocal, setCupounsLocal] = useState<Coupon<CouponFixed | CouponPercentage | CouponFixedDiscount | CouponBogo>[]>([])
-    const { isLoading: isLoadingInCart } = useAppSelector(state => state.cartOfRedux)
+    const { isLoading: isLoadingInCart} = useAppSelector(state => state.cartOfRedux)
     const { loadCoupon } = useCoupons()
 
     const { isError, isLoading, refetch } = useQuery({
         queryKey: ['cupons'],
         queryFn: async () => await getCupons(cupounsLocal.length),
         cacheTime: 0,
-        initialData: [],
         onError: () => { toast.error('Ocurrió un error con: getProductsByQuery || getProductsByCategory') },
         onSuccess: (newResults) => { setCupounsLocal(prevState => [...prevState, ...newResults]) },
         refetchInterval: false,
