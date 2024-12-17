@@ -9,11 +9,12 @@ import useCoupons from "./customHook/useCoupons";
 import CouponLoading from "../LOADINGS/CouponLoading";
 import { useAppSelector } from "../REDUX/hooks/useStore";
 import LoadingIntoAComponent from "../LOADINGS/LoadingIntoAComponent";
+import './Style/coupons.css'
 
 export default function Coupons() {
 
     const [cupounsLocal, setCupounsLocal] = useState<Coupon<CouponFixed | CouponPercentage | CouponFixedDiscount | CouponBogo>[]>([])
-    const { isLoading: isLoadingInCart} = useAppSelector(state => state.cartOfRedux)
+    const { isLoading: isLoadingInCart } = useAppSelector(state => state.cartOfRedux)
     const { loadCoupon } = useCoupons()
 
     const { isError, isLoading, refetch } = useQuery({
@@ -42,22 +43,24 @@ export default function Coupons() {
 
     }, [isLoading, refetch])
 
-    return (<main>
-        <h3>¡Disfruta de nuestros descuentos especiales!</h3>
-        <span><CiCircleAlert /> <br /> sólo es permitido obtener un cupón por cada compra</span>
+    return (<main className="coupons">
+        <h3 className="coupons__title">¡Disfruta de nuestros descuentos especiales!</h3>
+        <span className="coupons__alert">
+            <CiCircleAlert className="coupons__alert__icon" /> <br /> sólo es permitido obtener un cupón por cada compra</span>
         <ButtonGoCart />
 
-        <div>
-        </div>
-        <ul>
+        <ul className="coupons__list">
             {cupounsLocal.map((cupons, index) => (
                 <li
+                    className="coupons__list__item"
                     onClick={() => { loadCoupon(cupons.id) }}
                     ref={index === cupounsLocal.length - 1 ? observerFc : null}
-                    key={index} style={{ border: '1px solid red', margin: '100px', cursor: 'pointer' }}>
-                    <img src={cupons.img} alt={cupons.name.toLocaleUpperCase()} loading="lazy" />
-                    <h2>{cupons.name}</h2>
-                    <p>{cupons.description}</p>
+                    key={index}>
+                    <img 
+                    className="coupons__list__item__img"
+                    src={cupons.img} alt={cupons.name.toLocaleUpperCase()} loading="lazy" />
+                    <h2 className="coupons__list__item__name">{cupons.name}</h2>
+                    <p className="coupons__list__item__description">{cupons.description}</p>
                 </li>
             ))}
         </ul>

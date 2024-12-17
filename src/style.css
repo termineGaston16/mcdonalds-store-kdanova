@@ -8,10 +8,10 @@
 
 /* ROOT se encarga del diseño en todo el archivo */
 :root {
-  background-color: rgb(26, 26, 26);
+  background: radial-gradient(circle at 80% 30%, white, rgb(231, 241, 195));
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-weight: 700;
-  color: white;
+  color: rgb(18, 18, 18);
   overflow-x: hidden;
 
   scrollbar-gutter: stable;

@@ -10,9 +10,7 @@ import './Style/cart.css'
 export default function Cart() {
 
     const [cartLocalViewed, setCartLocalViewed] = useState<ProductsInCartViewed[]>([])
-    console.log(cartLocalViewed);
     
-
     const { isLoading, refetch } = useQuery({
         queryKey: ['cartLocalViewed'],
         queryFn: async () => await getCartViewed(cartLocalViewed.length),
@@ -52,11 +50,13 @@ export default function Cart() {
                         className={`cart__item ${prod.sizes && 'cupon'}`}
                         key={index}
                         ref={index === cartLocalViewed.length - 1 ? cartLocalViewedObserver : null}>
-                        <span>${prod.price} {prod.sizes}</span>
-                        <span>Cantidad: ({prod.quantity})</span>
-                        <img src={prod.img} alt={prod.name.toLocaleUpperCase()} loading="lazy" />
-                        <h3>{prod.name}</h3>
-                        <h5>{prod.size}</h5>
+                        <span className="cart__item__price">${prod.price} {prod.sizes}</span>
+                        <span className="cart__item__quantity">Cantidad: ({prod.quantity})</span>
+                        <img 
+                        className="cart__item__img"
+                        src={prod.img} alt={prod.name.toLocaleUpperCase()} loading="lazy" />
+                        <h3 className="cart__item__name">{prod.name}</h3>
+                        <h5 className="cart__item__size">{prod.size}</h5>
                     </li>
                 ))
                 :

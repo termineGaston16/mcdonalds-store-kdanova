@@ -8,11 +8,17 @@
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    gap: 5vw;
+    gap: 10%;
+
+    position: sticky;
+    top: 0;
 
     flex-wrap: wrap;
-    padding-top: 1vw;
+    padding: 2%;
     text-align: center;
+
+    background: radial-gradient(circle at 80% 90%, rgb(68, 68, 68), rgb(37, 37, 37));
+    color: white;
 }
 
 .header__list{
@@ -20,7 +26,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    gap: 2vw;
+    gap: 40%;
 
     list-style: none;
 }
@@ -31,7 +37,7 @@
 
 .header__link{
     aspect-ratio: 1/1;
-    width: 8vw;
+    width: 8%;
     max-width: 100px;
     min-width: 55px;
 
@@ -42,7 +48,6 @@
     text-align: center;
     font-size: clamp(2px, 1vw, 100px);
 
-    background: radial-gradient(circle at 20% 10%, rgb(175, 175, 175), rgb(34, 34, 34));
 }
 
 .header__link__logotipo{

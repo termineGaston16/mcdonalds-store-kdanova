@@ -5,6 +5,7 @@ import { FaFacebook } from "react-icons/fa";
 import { FaInstagramSquare } from "react-icons/fa";
 import './Style/header.css'
 import { Link } from "react-router-dom";
+import LogoOficial from '../../public/logoOficial.png'
 
 export default function Header() {
     return (
@@ -22,7 +23,7 @@ export default function Header() {
                     <a className="header__list__item__link" href="https://www.instagram.com/mcdonalds_ar/" target="_blank" rel="noopener noreferrer"><FaInstagramSquare /></a></li>
             </ul>
             <Link className="header__link" to={'/'}>
-                <img className="header__link__logotipo" src="" alt="Logotipo de McDonalds Store" loading="lazy" />
+                <img className="header__link__logotipo" src={LogoOficial} alt="Logotipo de McDonalds Store" loading="lazy" />
             </Link>
             <span className="header__copy">McDonald's ©2024 <br /> KDA/NOVA ©2024</span>
         </header>

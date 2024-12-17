@@ -164,8 +164,6 @@ export async function addProductToCart(productInCartLocal: ProductsInCart) {
 
         const docRef = doc(db, 'CART', 'NGnbFAO9mHkM2Hhy8drs')
         const docSnap = await getDoc(docRef)
-        console.log(2);
-        
 
         const CART: Cart = {
             content: (docSnap.data() as Cart).content,
@@ -280,7 +278,6 @@ export async function loadCoupon(idCoupon: string): Promise<ProductsInCart[]> {
                 break;
         }
 
-        console.log(productsAReturns);
         return productsAReturns
 
     } catch (error) {
